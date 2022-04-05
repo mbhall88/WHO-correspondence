@@ -1,0 +1,17 @@
+name: who-correspondence
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python
+  - jupyter
+  - seaborn
+  - pandas
+  - snakefmt
+  - snakemake
+  - upsetplot
+  - ca-certificates
+  - certifi
+  - openssl
+prefix: /usr/local/Caskroom/miniconda/base/envs/who-correspondence
