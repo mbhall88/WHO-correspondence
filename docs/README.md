@@ -54,7 +54,7 @@ Phenotypic DST of first and second line dugs. In brackets are indicated the used
 
 This CSV file contains the phenotypes for the isolates sequenced in [Huang *et al.*](https://doi.org/10.1093/cid/ciy883).
 
-In particular, this dataset provides linezolid phenotypes. 
+In particular, this dataset provides linezolid phenotypes.  
 
 This file was extracted from [Supplementary Table S6](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/cid/69/3/10.1093_cid_ciy883/1/ciy883_suppl_supplementary_table_s6.docx?Expires=1652148910&Signature=D7iy~iS4ZXFMCAifGgjnpD-OslN6pINjGYhFbqx1RI2unpvW9gaZ2CkiwXLd3cBagIABut8U4qKOXY11mOVw9LMZohqZNtkibKuu7SFgBJ-c2vMz9h10GNKHj5Ya98dg6AT7IPVsTk77OHopWoFsE6JlgbeCPIlH4i-kqBpPVQi~0fqr~hPmvO8Q6PolApyyi6W9hpuzejXT7cRipy1UH69AY7E1upLmVcsWqBnxptVDon3SwiuAoiGq3KrPIvX54vOJUfkTJ9S6uhg6Q-wJDnEb1DhoNtNRfTXmtuNqFrMBUwieDNhS9e0Jt985tMGFzrBQupjFZ7EIOa88FyZ3bA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA).
 
