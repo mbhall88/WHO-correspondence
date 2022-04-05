@@ -14,4 +14,5 @@ dependencies:
   - ca-certificates
   - certifi
   - openssl
+  - openpyxl
 prefix: /usr/local/Caskroom/miniconda/base/envs/who-correspondence

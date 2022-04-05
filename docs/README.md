@@ -76,3 +76,20 @@ details of how this file was generated.
 
 Essentially, all samples used in the WHO paper were removed from the non-WHO datasets in
 the samplesheets in this directory and the remaining data were collated into this file.
+
+## `who-catalogue-trimmed.tsv.gz`
+
+A slimmed down version of the WHO catalogue. We only keep the following columns
+
+    - drug
+    - variant
+    - genome_position
+    - Present_SOLO_R
+    - Present_SOLO_SR
+    - Present_S
+    - Present_R
+    - Absent_S
+    - Absent_R
+    - grading
+
+The catalogue in the WHO paper was downloaded from [Supplementary appendix 2](https://www.thelancet.com/cms/10.1016/S2666-5247(21)00301-3/attachment/77fc876a-afad-4c17-856e-6cc0d5951c29/mmc2.xlsx) on 04/04/2022.
