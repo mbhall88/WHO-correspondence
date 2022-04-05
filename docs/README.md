@@ -50,6 +50,24 @@ This data was extracted from the "WHO database column" of that Excel file.
 
 Phenotypic DST of first and second line dugs. In brackets are indicated the used critical concentration to defined Suceptibility (S) or Resistance (R) to each drug. N/A means "not available" (reference: Zignol M et al., 2018. Lancet Infect Dis 18:675-683. doi:10.1016/S1473-3099(18)30073-2).
 
+## `huang-samplesheet.csv`
+
+This CSV file contains the phenotypes for the isolates sequenced in [Huang *et al.*](https://doi.org/10.1093/cid/ciy883).
+
+In particular, this dataset provides linezolid phenotypes. 
+
+This file was extracted from [Supplementary Table S6](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/cid/69/3/10.1093_cid_ciy883/1/ciy883_suppl_supplementary_table_s6.docx?Expires=1652148910&Signature=D7iy~iS4ZXFMCAifGgjnpD-OslN6pINjGYhFbqx1RI2unpvW9gaZ2CkiwXLd3cBagIABut8U4qKOXY11mOVw9LMZohqZNtkibKuu7SFgBJ-c2vMz9h10GNKHj5Ya98dg6AT7IPVsTk77OHopWoFsE6JlgbeCPIlH4i-kqBpPVQi~0fqr~hPmvO8Q6PolApyyi6W9hpuzejXT7cRipy1UH69AY7E1upLmVcsWqBnxptVDon3SwiuAoiGq3KrPIvX54vOJUfkTJ9S6uhg6Q-wJDnEb1DhoNtNRfTXmtuNqFrMBUwieDNhS9e0Jt985tMGFzrBQupjFZ7EIOa88FyZ3bA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA).
+
+The sampleID can be mapped to run accessions in `PRJNA436454-huang.tsv`.
+
+## `PRJNA436454-huang.tsv`
+
+This is the report downloaded for bioproject [PRJNA436454](https://www.ebi.ac.uk/ena/browser/view/PRJNA436454).
+
+It can be used to map the isolates in `huang-samplesheet.csv` to ENA runs to download the fastq files.
+
+The `sample_title` column can be used to match to `sampleID` in `huang-samplesheet.csv`.
+
 ## `samplesheet.csv`
 
 This is the "master" sheet for this project. See
