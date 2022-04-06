@@ -87,6 +87,16 @@ the fastq files.
 
 The `sample_title` column can be used to match to `sampleID` in `huang-samplesheet.csv`.
 
+## `bainomugisa-pza-phenotypes.csv`
+
+Biosamples and pyrazinamide phenotypes for 100 isolates from [Arnold's MGen paper](https://doi.org/10.1099/mgen.0.000147).
+
+## `bainomugisa-PRJNA385247.tsv`
+
+This is the report downloaded for bioproject [PRJNA385247](https://www.ebi.ac.uk/ena/browser/view/PRJNA385247).
+
+It can be used to map the isolates from `bainomugisa-pza-phenotypes.csv` to ENA run accessions.
+
 ## `samplesheet.csv`
 
 This is the "master" sheet for this project. See
