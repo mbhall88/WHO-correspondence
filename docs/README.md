@@ -93,3 +93,13 @@ A slimmed down version of the WHO catalogue. We only keep the following columns
     - grading
 
 The catalogue in the WHO paper was downloaded from [Supplementary appendix 2](https://www.thelancet.com/cms/10.1016/S2666-5247(21)00301-3/attachment/77fc876a-afad-4c17-856e-6cc0d5951c29/mmc2.xlsx) on 04/04/2022.
+
+## `who-catalogue-errors.tsv`
+
+These are variants where the insertion/deletion contradicts itself.
+
+For example, `whiB7_192_del_1_gc_g` indicates that we have a deletion (`del`) of 1 base - `gc->g`. 
+
+Any variant in this file indicates a length that is not consistent with the actual difference in length between the reference and alternate allele.
+
+For example, `whiB7_192_del_2_gc_g` would be considered an error.

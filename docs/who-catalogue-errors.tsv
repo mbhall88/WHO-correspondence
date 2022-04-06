@@ -1,0 +1,109 @@
+drug	variant	genome_position	Present_SOLO_R	Present_SOLO_SR	Present_S	Present_R	Absent_S	Absent_R	grading
+AMI	rrs_1536_ins_3_ctaaggagcaccacgaaaacgccccaactggtggggcgtaggccgtgagg_cgaaggagcaccacgaaaagcaccccaactggtggggtgcgagccgtgag	1473381.0	0.0	0.0	2.0	1.0	15688.0	1287.0	3) Uncertain significance
+AMI	rrs_1258_ins_1_gcgaggttaagcgaatccttaaaagccggtctcagttcggatcggggtct_gtaaggttaagcgaatccttttaaagccggtctcagttcggattggggtc	1473103.0	0.0	0.0	3.0	1.0	15687.0	1287.0	3) Uncertain significance
+AMI	fprA_806_del_182_tccggttcttgacctctccgatcgagatcaagggcaagcgcaaagtggag_t	3474812.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	rrs_182_del_2_cacgggatgcatgtcttgtggtggaaagcgctttagcggtgtgggatgag_cgcgcatcgcatggtgtgtggtggaaagcttttgcggtgtgggatgggcc	1472027.0	0.0	0.0	1.0	0.0	15689.0	1288.0	3) Uncertain significance
+AMI	rrs_405_del_12_gggggatgacggccttcgggttgtaaacctctttcaccatcgacgaaggt_gagggatgacggccttcgggttgtaaacctctgttagcagggaagaagag	1472250.0	0.0	0.0	1.0	0.0	15689.0	1288.0	3) Uncertain significance
+AMI	rrs_533_ins_1_gtgcgagcgttgtccggaattactgggcgtaaagagctcgtaggtggttt_gcgcgagcgttgtccggaattattgggcgtaaagagcttgtaggcggttt	1472378.0	0.0	0.0	1.0	0.0	15689.0	1288.0	3) Uncertain significance
+AMI	rrs_978_ins_1_ctgggtttgacatgcacaggacgcgtctagagataggcgttcccttgtgg_caaggcttgacatatactggaccgcatcagagatggtgtttcccttcggg	1472823.0	0.0	0.0	1.0	0.0	15689.0	1288.0	3) Uncertain significance
+AMI	whiB6_105_del_183_cgtgcaaacgccgagcgggacctcatacagggcggttactgtcatgtcta_c	4338417.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	whiB6_-65_del_142_gagctccgagctctagtgcgcgcaccgccgagtaccagggcatagatcct_gtgta	4338586.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	whiB6_-73_del_20_agctctagtgcgcgcaccgccgagtaccagggcatagatcctgttaatca_agtctagtgcgcgcaccgccgagtaccagggctgtgtatctggcctcgcc	4338594.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	whiB6_8_del_316_tatcgcattaaccatagcgatgcaacagtttcctcctctgcctgcctagc_tt	4338514.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	whiB6_88_del_83_ggacctcatacagggcggttactgtcatgtctacgttcctccagaaagcg_g	4338434.0	0.0	0.0	1.0	0.0	15689.0	144.0	3) Uncertain significance
+AMI	whiB7_-1_del_176_gtcctgtttcacctgcttcctggtctggtggcggttcttcgaaagtgatc_ga	3568680.0	0.0	0.0	1.0	0.0	15689.0	1288.0	3) Uncertain significance
+AMI	whiB6_-111_del_83_tcctgttaatcagctgtgtatctggcctcgccggcgcgtatccgacccct_tgcgacagttcaggtgta	4338632.0	0.0	0.0	2.0	0.0	15688.0	144.0	3) Uncertain significance
+AMI	rrs_-127_ins_3_tggtttcacatttttgttgttatttttggccatgctcttgatgccccgtt_tctttttatttgttgttgtttttggccatacctagcactccccgtgtgtg	1471719.0	0.0	0.0	3.0	0.0	15687.0	144.0	3) Uncertain significance
+AMI	whiB6_-70_del_118_ccgagctctagtgcgcgcaccgccgagtaccagggcatagatcctgttaa_ctgacatgcgacagttcaggtgta	4338591.0	0.0	0.0	3.0	0.0	15687.0	144.0	3) Uncertain significance
+AMI	whiB6_93_del_309_gagcgggacctcatacagggcggttactgtcatgtctacgttcctccaga_g	4338429.0	0.0	0.0	4.0	0.0	15686.0	144.0	3) Uncertain significance
+CAP	tlyA_95_del_173_tgcgcatcgacgggctgccggcggtcaagccggccaccgccgtgtccgac_t	1918034.0	1.0	1.0	0.0	1.0	10556.0	969.0	2) Assoc w R - Interim
+CAP	fprA_806_del_182_tccggttcttgacctctccgatcgagatcaagggcaagcgcaaagtggag_t	3474812.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	rrs_405_del_12_gggggatgacggccttcgggttgtaaacctctttcaccatcgacgaaggt_gagggatgacggccttcgggttgtaaacctctgttagcagggaagaagag	1472250.0	0.0	0.0	1.0	0.0	10555.0	970.0	3) Uncertain significance
+CAP	rrs_533_ins_1_gtgcgagcgttgtccggaattactgggcgtaaagagctcgtaggtggttt_gcgcgagcgttgtccggaattattgggcgtaaagagcttgtaggcggttt	1472378.0	0.0	0.0	1.0	0.0	10555.0	970.0	3) Uncertain significance
+CAP	rrs_978_ins_1_ctgggtttgacatgcacaggacgcgtctagagataggcgttcccttgtgg_caaggcttgacatatactggaccgcatcagagatggtgtttcccttcggg	1472823.0	0.0	0.0	1.0	0.0	10555.0	970.0	3) Uncertain significance
+CAP	whiB6_105_del_183_cgtgcaaacgccgagcgggacctcatacagggcggttactgtcatgtcta_c	4338417.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	whiB6_-65_del_142_gagctccgagctctagtgcgcgcaccgccgagtaccagggcatagatcct_gtgta	4338586.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	whiB6_-73_del_20_agctctagtgcgcgcaccgccgagtaccagggcatagatcctgttaatca_agtctagtgcgcgcaccgccgagtaccagggctgtgtatctggcctcgcc	4338594.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	whiB6_8_del_316_tatcgcattaaccatagcgatgcaacagtttcctcctctgcctgcctagc_tt	4338514.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	whiB6_88_del_83_ggacctcatacagggcggttactgtcatgtctacgttcctccagaaagcg_g	4338434.0	0.0	0.0	1.0	0.0	10555.0	199.0	3) Uncertain significance
+CAP	whiB6_-111_del_83_tcctgttaatcagctgtgtatctggcctcgccggcgcgtatccgacccct_tgcgacagttcaggtgta	4338632.0	0.0	0.0	2.0	0.0	10554.0	199.0	3) Uncertain significance
+CAP	whiB6_-70_del_118_ccgagctctagtgcgcgcaccgccgagtaccagggcatagatcctgttaa_ctgacatgcgacagttcaggtgta	4338591.0	0.0	0.0	3.0	0.0	10553.0	199.0	3) Uncertain significance
+CAP	whiB6_93_del_309_gagcgggacctcatacagggcggttactgtcatgtctacgttcctccaga_g	4338429.0	0.0	0.0	5.0	0.0	10551.0	199.0	3) Uncertain significance
+DLM	fbiB_648_del_486_ggtgcgtgggttcggcgtgtccgacgacggctcgacagcccggcaactgc_g	3642182.0	1.0	1.0	0.0	1.0	7696.0	81.0	3) Uncertain significance
+EMB	embR_400_del_381_cttgttcgaaccggccggcggcggccgcgtgcacgcccgcggttttttcg_ca	1416948.0	0.0	0.0	1.0	0.0	25807.0	229.0	3) Uncertain significance
+EMB	embR_-66_del_2428_ccacgtttcgccgatgcggtaagaacccaggatctcggcacgccgtgcga_c	1417413.0	0.0	0.0	1.0	0.0	25807.0	229.0	3) Uncertain significance
+EMB	embR_694_del_1042_tcacccggcgataggcgcccagcgcatcggattgccggtcggagaggtag_t	1416654.0	0.0	0.0	1.0	0.0	25807.0	229.0	3) Uncertain significance
+EMB	embR_-7_del_494_tcctccgtggcttgcggtgccaaggtgccaatagggtgtcgctaccggtc_t	1417354.0	0.0	0.0	1.0	0.0	25807.0	229.0	3) Uncertain significance
+ETH	ethA_575_del_1655_ggcacgagcgtgaccgccgttgcgccactgccgatcacgacgatgttctt_gt	4326899.0	5.0	6.0	1.0	6.0	10952.0	2959.0	2) Assoc w R - Interim
+ETH	ethA_969_del_2027_ggtcgcggtgaaccgttcaatggtgtcggtcaccacctcgaccttcccgt_g	4326505.0	4.0	4.0	0.0	4.0	10953.0	2961.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgagggccgctcttcgacatctgagcccggtcgctcga	4326168.0	2.0	2.0	0.0	2.0	10953.0	2963.0	2) Assoc w R - Interim
+ETH	ethA_1306_ins_22_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgaagggccgctcttcgacatctgagcccccgctcttc	4326168.0	2.0	2.0	0.0	2.0	10953.0	2963.0	2) Assoc w R - Interim
+ETH	ethA_1460_del_3961_accggggcaggccttttggcgaaccgcagaccctcgtcgtcgatcttgcc_a	4326014.0	0.0	0.0	0.0	2.0	10953.0	2963.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgaaggccgctcttcgacatctgagcccggtcgctcga	4326168.0	2.0	4.0	2.0	2.0	10951.0	2963.0	2) Assoc w R - Interim
+ETH	ethA_124_del_120_ccatggattcccgcttttccaggatggcgtagctcttggtcgggcaacgg_c	4327350.0	1.0	1.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgaagggccgctcttcgacatctgagcccgtcgctcga	4326168.0	1.0	1.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgaagggccgctcttcgacatctgagccggtcgctcga	4326168.0	1.0	1.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_1306_ins_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaacctccatgaagggccgctcttcgacatctgagcccggtcgctc	4326168.0	0.0	0.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_1306_ins_2_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaacactccatgaagggccgctcttcgacatctgagcccggtcgct	4326168.0	0.0	0.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_654_del_173_ccggtctggctgcgacacgatgtaggtgggtgagcgctgcagcatcgtga_c	4326820.0	0.0	0.0	0.0	1.0	10953.0	2964.0	2) Assoc w R - Interim
+ETH	ethA_1000_del_141_gcagttcgcgacctgagttcagccggattccggtcgcggtgaaccgttca_g	4326474.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_125_del_157_cccatggattcccgcttttccaggatggcgtagctcttggtcgggcaacg_c	4327349.0	0.0	0.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_1_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatgaagggcgctcttcgacatctgagcccggtcgctcga	4326168.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_15_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_ggggccgctcttcgacatctgagcccggtcgctcgacgaccacggt	4326168.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_166_del_673_cggagcgaattccgggataacggaacaaatcccaggtgccgcccatggat_c	4327308.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_167_del_1409_tcggagcgaattccgggataacggaacaaatcccaggtgccgcccatgga_t	4327307.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_868_del_1561_cccaggggttgtagtgcgggccgaagtgctttcgcacgtcgtacccctcg_c	4326606.0	0.0	1.0	1.0	0.0	10952.0	2965.0	2) Assoc w R - Interim
+ETH	ethA_1306_del_2_gggtgaactccatgaagggccgctcttcgacatctgagcccggtcgctcg_gggtgaactccatagggccgctcttcgacatctgagcccggtcgctcgac	4326168.0	0.0	2.0	2.0	0.0	10951.0	2965.0	2) Assoc w R - Interim
+INH	katG_2152_del_407_gctgcgcgtcatcggcgccatagacctcgacaagcgcccgcaactccgag_g	2153960.0	0.0	0.0	0.0	1.0	22137.0	12171.0	2) Assoc w R - Interim
+INH	katG_925_del_1184_cggttccggtgccatacgagctcttccagcccaagcccatctgctccagc_c	2155187.0	1.0	1.0	0.0	1.0	22137.0	12171.0	2) Assoc w R - Interim
+INH	ahpC_-2_del_297_tcatgccactgctaaccattggcgatcaattccccgcctaccagctcacc_t	2726191.0	0.0	0.0	0.0	1.0	22137.0	12171.0	3) Uncertain significance
+INH	ndh_484_del_691_tggaccgttcggcttgctcgaaagcgctcaatatgcggccacgcaactcc_t	2102559.0	0.0	0.0	1.0	0.0	22136.0	480.0	3) Uncertain significance
+INH	ndh_-69_del_217_ccgctgcaggcccagttgaggacatgtgtcatcagccacaccacagcgtg_c	2103111.0	0.0	0.0	1.0	0.0	22136.0	480.0	3) Uncertain significance
+INH	Rv1258c_506_del_121_ccaaccgtcgcgatcatcaagccaccgatggccgggccgacaataaaggc_c	1406835.0	0.0	0.0	1.0	0.0	22136.0	480.0	3) Uncertain significance
+INH	Rv1258c_763_del_6693_ggtggtcggtgaagtatttcgggaacagcacgctctccatcggcagatac_g	1406578.0	0.0	0.0	1.0	0.0	22136.0	480.0	3) Uncertain significance
+INH	Rv2752c_1596_del_64_cccttgagcgatccggatcggatcggtgacgttggcggccaccaacgatt_c	3064596.0	0.0	0.0	1.0	0.0	22136.0	480.0	3) Uncertain significance
+INH	Rv2752c_1153_del_82_agaggaacagcagctcaccggcgtacgcgtggccggaaacatgcaccctt_a	3065039.0	0.0	0.0	17.0	0.0	22120.0	480.0	3) Uncertain significance
+KAN	rrs_405_del_12_gggggatgacggccttcgggttgtaaacctctttcaccatcgacgaaggt_gagggatgacggccttcgggttgtaaacctctgttagcagggaagaagag	1472250.0	0.0	0.0	1.0	0.0	14672.0	1481.0	3) Uncertain significance
+KAN	rrs_533_ins_1_gtgcgagcgttgtccggaattactgggcgtaaagagctcgtaggtggttt_gcgcgagcgttgtccggaattattgggcgtaaagagcttgtaggcggttt	1472378.0	0.0	0.0	1.0	0.0	14672.0	1481.0	3) Uncertain significance
+KAN	rrs_978_ins_1_ctgggtttgacatgcacaggacgcgtctagagataggcgttcccttgtgg_caaggcttgacatatactggaccgcatcagagatggtgtttcccttcggg	1472823.0	0.0	0.0	1.0	0.0	14672.0	1481.0	3) Uncertain significance
+LEV	gyrA_1301_del_32_caatcctggacatgcagttgcggcgcctggccgcactggaacgccagcgc_cgatcctggacatgcagctgcgccggctggccgccctggagcggcagcgc	8602.0	0.0	0.0	1.0	0.0	15168.0	3108.0	3) Uncertain significance
+LEV	gyrB_1976_del_20_ggcgcagctttatcacccgcaacgccaaggatgttcggttcctggatgtc_gccgcagcttcatcacccgcaatgccaaagacgttcgcttcctagacgtt	7215.0	0.0	0.0	1.0	0.0	15168.0	3108.0	3) Uncertain significance
+MXF	gyrA_2516_del_53_aatcaggctcgcccgacgacgatgcggatcgcgtagcgatctgaggagga_agccagtcaggctcagcg	9817.0	0.0	0.0	1.0	0.0	11481.0	1869.0	3) Uncertain significance
+PZA	pncA_190_del_845_agtccggtgtgccggagaagtggtcacccgggtcgatgtggaagtccttg_a	2289052.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	pncA_350_del_1232_agcagtggcgtgccgttctcgtcgactccttcgaagccgctgtacgctcc_a	2288892.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	pncA_400_del_119_caataccgaccacatcgacctcatcgacgccgcgttgccgcagccaattc_c	2288842.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	pncA_464_del_321_accctggtggccaagccattgcgtaccgcgtcctcggccgtctggcgcac_a	2288778.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	pncA_493_del_1237_ccgacacacccgctgtcaggtccaccagcaccctggtggccaagccattg_c	2288749.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	pncA_560_del_163_caggagctgcaaaccaactcgacgctggcggtgcgcatctcctccagcgc_c	2288682.0	1.0	1.0	0.0	1.0	13573.0	2328.0	2) Assoc w R - Interim
+PZA	PPE35_2388_del_150_ggtggtaatcgccgggatgctgagctgcggcagcgtaaacccacccagcg_g	2168225.0	0.0	0.0	1.0	0.0	13572.0	458.0	3) Uncertain significance
+PZA	Rv1258c_506_del_121_ccaaccgtcgcgatcatcaagccaccgatggccgggccgacaataaaggc_c	1406835.0	0.0	0.0	1.0	0.0	13572.0	458.0	3) Uncertain significance
+PZA	Rv1258c_763_del_6693_ggtggtcggtgaagtatttcgggaacagcacgctctccatcggcagatac_g	1406578.0	0.0	0.0	1.0	0.0	13572.0	458.0	3) Uncertain significance
+PZA	Rv1258c_926_del_5663_ggcaggaacgcgatgaccatcgatgccaaacccagggtaagaaccgcggt_gtcg	1406415.0	0.0	0.0	1.0	0.0	13572.0	458.0	3) Uncertain significance
+RIF	Rv2752c_1596_del_64_cccttgagcgatccggatcggatcggtgacgttggcggccaccaacgatt_c	3064596.0	0.0	0.0	1.0	0.0	24432.0	321.0	3) Uncertain significance
+RIF	Rv2752c_1153_del_82_agaggaacagcagctcaccggcgtacgcgtggccggaaacatgcaccctt_a	3065039.0	0.0	0.0	16.0	0.0	24417.0	321.0	3) Uncertain significance
+STM	gid_291_del_130_gcggcgcagtagcggttctaggagaactacctggaggtccggccgcgcta_g	4407912.0	3.0	11.0	8.0	5.0	9341.0	4630.0	2) Assoc w R - Interim
+STM	gid_103_del_51_gcccccgctccacaccgggtcccgccaacgcttcggcgtaccgccgagca_ggccccgctccacaccgggtcccgccaacgc	4408100.0	1.0	1.0	0.0	1.0	9349.0	4634.0	2) Assoc w R - Interim
+STM	gid_114_del_105_gggtcccaccagcccccgctccacaccgggtcccgccaacgcttcggcgt_g	4408089.0	1.0	2.0	1.0	1.0	9348.0	4634.0	2) Assoc w R - Interim
+STM	gid_141_del_211_ccggtcccatagcctaccgacttcgcggggtcccaccagcccccgctcca_c	4408062.0	0.0	1.0	1.0	0.0	9348.0	4635.0	2) Assoc w R - Interim
+STM	gid_158_del_174_gcgcagttcagtagatgccggtcccatagcctaccgacttcgcggggtcc_g	4408045.0	0.0	1.0	1.0	0.0	9348.0	4635.0	2) Assoc w R - Interim
+STM	gid_320_del_394_tctgtcaccatctctcgaagaaactcggtgcggcgcagtagcggttctag_t	4407883.0	0.0	1.0	1.0	0.0	9348.0	4635.0	2) Assoc w R - Interim
+STM	gid_331_del_82_ccacgcccagatctgtcaccatctctcgaagaaactcggtgcggcgcagt_caacgc	4407872.0	0.0	1.0	1.0	0.0	9348.0	4635.0	2) Assoc w R - Interim
+STM	gid_332_del_337_gccacgcccagatctgtcaccatctctcgaagaaactcggtgcggcgcag_g	4407871.0	0.0	1.0	1.0	0.0	9348.0	4635.0	2) Assoc w R - Interim
+STM	gid_447_del_96_gctccatttcgtcaacttgtccaacgcggccaccgcccgtgacaccgcag_g	4407756.0	0.0	4.0	4.0	0.0	9345.0	4635.0	2) Assoc w R - Interim
+STM	whiB6_93_del_309_gagcgggacctcatacagggcggttactgtcatgtctacgttcctccaga_g	4338429.0	3.0	216.0	213.0	3.0	9136.0	186.0	3) Uncertain significance
+STM	Rv1258c_926_del_5663_ggcaggaacgcgatgaccatcgatgccaaacccagggtaagaaccgcggt_gtcg	1406415.0	0.0	0.0	0.0	1.0	9349.0	4634.0	3) Uncertain significance
+STM	whiB7_-1_del_176_gtcctgtttcacctgcttcctggtctggtggcggttcttcgaaagtgatc_ga	3568680.0	0.0	0.0	0.0	1.0	9349.0	4634.0	3) Uncertain significance
+STM	whiB6_105_del_183_cgtgcaaacgccgagcgggacctcatacagggcggttactgtcatgtcta_c	4338417.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_-106_del_51_atagatcctgttaatcagctgtgtatctggcctcgccggcgcgtatccga_a	4338627.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_180_del_174_ccaccggcgcgggcaagcccggcacagggtcttggcctcgtcgtcgggag_c	4338342.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_181_del_499_gccaccggcgcgggcaagcccggcacagggtcttggcctcgtcgtcggga_g	4338341.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_213_del_1196_acccgcggactcgacggcgtcgcgtgcacacagccaccggcgcgggcaag_a	4338309.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_-23_del_480_tcctcctctgcctgcctagcggtgctgcggctccggttcggcgagctccg_t	4338544.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_-27_del_233_cctctgcctgcctagcggtgctgcggctccggttcggcgagctccgagct_c	4338548.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_-65_del_142_gagctccgagctctagtgcgcgcaccgccgagtaccagggcatagatcct_gtgta	4338586.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_-73_del_20_agctctagtgcgcgcaccgccgagtaccagggcatagatcctgttaatca_agtctagtgcgcgcaccgccgagtaccagggctgtgtatctggcctcgcc	4338594.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_8_del_316_tatcgcattaaccatagcgatgcaacagtttcctcctctgcctgcctagc_tt	4338514.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_88_del_83_ggacctcatacagggcggttactgtcatgtctacgttcctccagaaagcg_g	4338434.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB6_93_del_107_gagcgggacctcatacagggcggttactgtcatgtctacgttcctccaga_g	4338429.0	0.0	0.0	1.0	0.0	9348.0	189.0	3) Uncertain significance
+STM	whiB7_96_del_213_ggtatcggcgaaccacagatcgggatcaccgacgtggcacggcaaaaccg_g	3568584.0	0.0	1.0	1.0	0.0	9348.0	4635.0	3) Uncertain significance
+STM	whiB6_-32_del_156_gcctgcctagcggtgctgcggctccggttcggcgagctccgagctctagt_gtgacatgcgacagttcaggtgta	4338553.0	0.0	0.0	3.0	0.0	9346.0	189.0	3) Uncertain significance
