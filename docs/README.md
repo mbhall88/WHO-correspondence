@@ -24,47 +24,66 @@ Specifically, the following columns were extracted:
 
 ## `dlm-mics.csv`
 
-Gathering Delamanid (DLM) phenotypes from https://journals.asm.org/doi/full/10.1128/JCM.01304-20
+Gathering Delamanid (DLM) phenotypes
+from https://journals.asm.org/doi/full/10.1128/JCM.01304-20
 
-They used a critical concentraction of >0.06μg/ml - based on the [WHO technical guidelines](https://apps.who.int/iris/bitstream/handle/10665/260470/WHO-CDS-TB-2018.5-eng.pdf).
+They used a critical concentraction of >0.06μg/ml - based on
+the [WHO technical guidelines](https://apps.who.int/iris/bitstream/handle/10665/260470/WHO-CDS-TB-2018.5-eng.pdf)
+.
 
-MICs and accessions where taken from the supplementary Excel spreadsheet https://journals.asm.org/doi/suppl/10.1128/JCM.01304-20/suppl_file/jcm.01304-20-sd004.xlsx
+MICs and accessions where taken from the supplementary Excel
+spreadsheet https://journals.asm.org/doi/suppl/10.1128/JCM.01304-20/suppl_file/jcm.01304-20-sd004.xlsx
 
-This file was taken from the following columns in the "Mutations list for DLM" sheet of the above-mentioned Excel file.
+This file was taken from the following columns in the "Mutations list for DLM" sheet of
+the above-mentioned Excel file.
+
 - ISOLATE 1 (renamed to ISOLATE 1 DLM MIC (ug/ml) in this file)
 - ISOLATE 2 (renamed to ISOLATE 2 DLM MIC (ug/ml) in this file)
 - DRS Sample selected (Isolate 1)
 - DRS Sample selected (Isolate 2)
 
-The purpose of this file was to match up the isolate names and phenotypes with the accessions in `dlm-accessions.csv`.
+The purpose of this file was to match up the isolate names and phenotypes with the
+accessions in `dlm-accessions.csv`.
 
 ## `dlm-accessions.csv`
 
-Gathering Delamanid (DLM) phenotypes from https://journals.asm.org/doi/full/10.1128/JCM.01304-20
+Gathering Delamanid (DLM) phenotypes
+from https://journals.asm.org/doi/full/10.1128/JCM.01304-20
 
-They used a critical concentraction of >0.06μg/ml - based on the [WHO technical guidelines](https://apps.who.int/iris/bitstream/handle/10665/260470/WHO-CDS-TB-2018.5-eng.pdf).
+They used a critical concentraction of >0.06μg/ml - based on
+the [WHO technical guidelines](https://apps.who.int/iris/bitstream/handle/10665/260470/WHO-CDS-TB-2018.5-eng.pdf)
+.
 
-MICs and accessions where taken from the supplementary Excel spreadsheet https://journals.asm.org/doi/suppl/10.1128/JCM.01304-20/suppl_file/jcm.01304-20-sd004.xlsx
+MICs and accessions where taken from the supplementary Excel
+spreadsheet https://journals.asm.org/doi/suppl/10.1128/JCM.01304-20/suppl_file/jcm.01304-20-sd004.xlsx
 
 This data was extracted from the "WHO database column" of that Excel file.
 
-Phenotypic DST of first and second line dugs. In brackets are indicated the used critical concentration to defined Suceptibility (S) or Resistance (R) to each drug. N/A means "not available" (reference: Zignol M et al., 2018. Lancet Infect Dis 18:675-683. doi:10.1016/S1473-3099(18)30073-2).
+Phenotypic DST of first and second line dugs. In brackets are indicated the used
+critical concentration to defined Suceptibility (S) or Resistance (R) to each drug. N/A
+means "not available" (reference: Zignol M et al., 2018. Lancet Infect Dis 18:675-683.
+doi:10.1016/S1473-3099(18)30073-2).
 
 ## `huang-samplesheet.csv`
 
-This CSV file contains the phenotypes for the isolates sequenced in [Huang *et al.*](https://doi.org/10.1093/cid/ciy883).
+This CSV file contains the phenotypes for the isolates sequenced in [Huang *et
+al.*](https://doi.org/10.1093/cid/ciy883).
 
-In particular, this dataset provides linezolid phenotypes.  
+In particular, this dataset provides linezolid phenotypes.
 
-This file was extracted from [Supplementary Table S6](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/cid/69/3/10.1093_cid_ciy883/1/ciy883_suppl_supplementary_table_s6.docx?Expires=1652148910&Signature=D7iy~iS4ZXFMCAifGgjnpD-OslN6pINjGYhFbqx1RI2unpvW9gaZ2CkiwXLd3cBagIABut8U4qKOXY11mOVw9LMZohqZNtkibKuu7SFgBJ-c2vMz9h10GNKHj5Ya98dg6AT7IPVsTk77OHopWoFsE6JlgbeCPIlH4i-kqBpPVQi~0fqr~hPmvO8Q6PolApyyi6W9hpuzejXT7cRipy1UH69AY7E1upLmVcsWqBnxptVDon3SwiuAoiGq3KrPIvX54vOJUfkTJ9S6uhg6Q-wJDnEb1DhoNtNRfTXmtuNqFrMBUwieDNhS9e0Jt985tMGFzrBQupjFZ7EIOa88FyZ3bA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA).
+This file was extracted
+from [Supplementary Table S6](https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/cid/69/3/10.1093_cid_ciy883/1/ciy883_suppl_supplementary_table_s6.docx?Expires=1652148910&Signature=D7iy~iS4ZXFMCAifGgjnpD-OslN6pINjGYhFbqx1RI2unpvW9gaZ2CkiwXLd3cBagIABut8U4qKOXY11mOVw9LMZohqZNtkibKuu7SFgBJ-c2vMz9h10GNKHj5Ya98dg6AT7IPVsTk77OHopWoFsE6JlgbeCPIlH4i-kqBpPVQi~0fqr~hPmvO8Q6PolApyyi6W9hpuzejXT7cRipy1UH69AY7E1upLmVcsWqBnxptVDon3SwiuAoiGq3KrPIvX54vOJUfkTJ9S6uhg6Q-wJDnEb1DhoNtNRfTXmtuNqFrMBUwieDNhS9e0Jt985tMGFzrBQupjFZ7EIOa88FyZ3bA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA)
+.
 
 The sampleID can be mapped to run accessions in `PRJNA436454-huang.tsv`.
 
 ## `PRJNA436454-huang.tsv`
 
-This is the report downloaded for bioproject [PRJNA436454](https://www.ebi.ac.uk/ena/browser/view/PRJNA436454).
+This is the report downloaded for
+bioproject [PRJNA436454](https://www.ebi.ac.uk/ena/browser/view/PRJNA436454).
 
-It can be used to map the isolates in `huang-samplesheet.csv` to ENA runs to download the fastq files.
+It can be used to map the isolates in `huang-samplesheet.csv` to ENA runs to download
+the fastq files.
 
 The `sample_title` column can be used to match to `sampleID` in `huang-samplesheet.csv`.
 
@@ -92,14 +111,40 @@ A slimmed down version of the WHO catalogue. We only keep the following columns
     - Absent_R
     - grading
 
-The catalogue in the WHO paper was downloaded from [Supplementary appendix 2](https://www.thelancet.com/cms/10.1016/S2666-5247(21)00301-3/attachment/77fc876a-afad-4c17-856e-6cc0d5951c29/mmc2.xlsx) on 04/04/2022.
+The catalogue in the WHO paper was downloaded
+from [Supplementary appendix 2](https://www.thelancet.com/cms/10.1016/S2666-5247(21)00301-3/attachment/77fc876a-afad-4c17-856e-6cc0d5951c29/mmc2.xlsx)
+on 04/04/2022.
 
 ## `who-catalogue-errors.tsv`
 
 These are variants where the insertion/deletion contradicts itself.
 
-For example, `whiB7_192_del_1_gc_g` indicates that we have a deletion (`del`) of 1 base - `gc->g`. 
+For example, `whiB7_192_del_1_gc_g` indicates that we have a deletion (`del`) of 1 base
+- `gc->g`.
 
-Any variant in this file indicates a length that is not consistent with the actual difference in length between the reference and alternate allele.
+Any variant in this file indicates a length that is not consistent with the actual
+difference in length between the reference and alternate allele.
 
 For example, `whiB7_192_del_2_gc_g` would be considered an error.
+
+## `who-panel.tsv`
+
+This is the cleaned catalogue, minus the variants in `who-catalogue-errors.tsv`. The
+columns in the file describe:
+
+- **gene**: gene of the variant
+- **mutation**: the gene coordinates of the variant in the respective gene. i.e. `A2T`
+  is an `A` changed to a `T` at position 2. Whether the position is in nucleic acid or
+  amino acid space depends on the value of **alphabet**.
+- **alphabet**: What residue-space the variant is in - DNA or PROT (protein)
+- **grading**: The WHO grading of the variant:
+    1. Associated with resistance
+    2. Associated with resistance - interim
+    3. Uncertain significance
+    4. Not associated with resistance - interim
+    5. Not associated with resistance
+
+This file is intended to be used for constructing a Mykrobe custom panel, with the
+removal of the header, grading column, and drugs column. In addition, it is used to
+construct the `var2res.json` file Mykrobe uses to map variants to the drug(s) they are
+associated with.
