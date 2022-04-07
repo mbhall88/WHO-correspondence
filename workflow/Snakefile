@@ -24,6 +24,7 @@ results = Path("results").resolve()
 panel_dir = results / "panel"
 h37rv = Path(config["reference"]).resolve()
 annotation = Path(config["genbank"]).resolve()
+features = Path(config["features"]).resolve()
 full_panel = Path(config["full_panel"]).resolve()
 GRADES = config["grades"]
 # =====================================

@@ -20,6 +20,7 @@ rule extract_background_vcfs:
 rule select_panel_variants:
     input:
         full_panel=full_panel,
+        features=features
     output:
         panel=panel_dir / "who2021/grading_{grade}/panel.tsv",
         resistance_json=panel_dir / "who2021/grading_{grade}/var2drug.json",
@@ -37,9 +38,9 @@ rule construct_who_panel:
         panel=rules.select_panel_variants.output.panel,
         resistance_json=rules.select_panel_variants.output.resistance_json,
     output:
-        probes=panel_dir / "who2021/grade_{grade}/probes.fa",
+        probes=panel_dir / "who2021/grading_{grade}/probes.fa",
     log:
-        log_dir / "construct_who_panel/grade_{grade}.log",
+        log_dir / "construct_who_panel/grading_{grade}.log",
     shadow:
         "shallow"
     params:
