@@ -32,7 +32,7 @@ GRADES = config["grades"]
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
 for run, row in samplesheet.iterrows():
-    run_info = data_dir / f"fastq/{run}/fastq-run-info.json"
+    run_info = data_dir / f"fastq/{run}/"
     output.add(run_info)
 
 
