@@ -26,7 +26,7 @@ rule select_panel_variants:
     log:
         log_dir / "select_panel_variants/grade_{grade}.log",
     script:
-        scripts_dir / "select_panel_variants.py"
+        str(scripts_dir / "select_panel_variants.py")
 
 
 rule construct_who_panel:
@@ -50,7 +50,7 @@ rule construct_who_panel:
         """
         date +"[%Y-%m-%d %H:%M:%S] Starting the database..." > {log}
         mkdir -p {params.db} 2>> {log}
-        mongod --quiet --dbpath {params.db} &
+        mongod --quiet --dbpath {params.db} &> /dev/null &
 
         date +"[%Y-%m-%d %H:%M:%S] Adding background variants to database..." >> {log}
         for VCF in {input.vcf_dir}/*.vcf; do
@@ -63,7 +63,7 @@ rule construct_who_panel:
           -g {input.genbank} -t {input.panel} {input.reference} > {output.probes} 2>> {log}
 
         date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
-        mongod --shutdown --dbpath {params.db} 2>> {log}
+        #mongod --shutdown --dbpath {params.db} 2>> {log}
 
         date +"[%Y-%m-%d %H:%M:%S] Done!" >> {log}
         """

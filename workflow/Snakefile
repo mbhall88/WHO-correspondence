@@ -19,6 +19,7 @@ env_dir = Path("workflow/envs").resolve()
 rules_dir = Path("workflow/rules").resolve()
 scripts_dir = Path("workflow/scripts").resolve()
 log_dir = Path("logs/stderr")
+data_dir = Path("data").resolve()
 results = Path("results").resolve()
 panel_dir = results / "panel"
 h37rv = Path(config["reference"]).resolve()
@@ -30,9 +31,13 @@ GRADES = config["grades"]
 # =====================================
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
+for run, row in samplesheet.iterrows():
+    run_info = data_dir / f"fastq/{run}/fastq-run-info.json"
+    output.add(run_info)
 
-for grade in GRADES:
-    output.add(panel_dir / f"who2021/grade_{grade}/probes.fa")
+
+# for grade in GRADES:
+#     output.add(panel_dir / f"who2021/grade_{grade}/probes.fa")
 # =====================================
 
 
@@ -42,3 +47,4 @@ rule all:
 
 
 include: rules_dir / "panel.smk"
+include: rules_dir / "download.smk"

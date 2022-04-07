@@ -7,4 +7,5 @@ panel_kmer_size:     21
 grades: # grading levels to build panels for
   - 2
 containers:
-  base: "docker://bash:5.1"
+  base:     "docker://bash:5.1"
+  fastq_dl: "docker://quay.io/biocontainers/fastq-dl:1.0.6--hdfd78af_1"
