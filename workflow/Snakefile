@@ -1,0 +1,44 @@
+from pathlib import Path
+from typing import Dict, Set
+import pandas as pd
+
+
+# =====================================
+# Workflow config items
+configfile: "config/config.yaml"
+
+
+samplesheet = pd.read_csv(config["samplesheet"], index_col="run")
+containers: Dict[str, str] = config["containers"]
+# =====================================
+
+# =====================================
+# Constants for workflow
+GB = 1_024
+env_dir = Path("workflow/envs").resolve()
+rules_dir = Path("workflow/rules").resolve()
+scripts_dir = Path("workflow/scripts").resolve()
+log_dir = Path("logs/stderr")
+results = Path("results").resolve()
+panel_dir = results / "panel"
+h37rv = Path(config["reference"]).resolve()
+annotation = Path(config["genbank"]).resolve()
+full_panel = Path(config["full_panel"]).resolve()
+GRADES = config["grades"]
+# =====================================
+
+# =====================================
+# Generate the set of required output files from the pipeline
+output: Set[Path] = set()
+
+for grade in GRADES:
+    output.add(panel_dir / f"who2021/grade_{grade}/probes.fa")
+# =====================================
+
+
+rule all:
+    input:
+        output,
+
+
+include: rules_dir / "panel.smk"
