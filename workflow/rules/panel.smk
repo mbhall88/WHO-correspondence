@@ -65,8 +65,8 @@ rule construct_who_panel:
         mykrobe variants make-probes --db_name {params.db_name} -k {params.kmer_size} \
           -g {input.genbank} -t {input.panel} {input.reference} > {output.probes} 2>> {log}
 
-        # date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
-        # mongod --shutdown --dbpath {params.db} 2>> {log}
+        date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
+        mongod --shutdown --dbpath {params.db} 2>> {log}
 
         date +"[%Y-%m-%d %H:%M:%S] Done!" >> {log}
         """

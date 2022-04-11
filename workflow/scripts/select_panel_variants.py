@@ -74,9 +74,10 @@ with open(snakemake.input.full_panel) as in_fp, open(
         if grading > max_grade:
             continue
 
-        # The position of DNA mutations on the rev strand point to the *end* of the
+        # The position of DNA mutations (inside genes) on the rev strand point to the *end* of the
         # reference allele. See the data cleaning notebook for an explanation
-        if gene_strands[gene] == "-" and alpha == "DNA":
+        is_promotor_mut = "-" in mut
+        if gene_strands[gene] == "-" and alpha == "DNA" and not is_promotor_mut:
             ref, pos, alt = split_var_name(mut)
             ref = revcomp(ref)
             alt = revcomp(alt)
