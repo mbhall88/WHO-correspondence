@@ -5,9 +5,11 @@ rule download_data:
         log_dir / "download_data/{run}.log",
     container:
         containers["fastq_dl"]
+    shadow:
+        "shallow"
     resources:
         mem_mb=int(0.5 * GB),
     params:
-        db="sra",
+        db="ena",
     shell:
         "fastq-dl --outdir {output.outdir} {wildcards.run} {params.db} > {log} 2>&1"
