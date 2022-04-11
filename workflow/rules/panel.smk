@@ -8,8 +8,8 @@ rule extract_background_vcfs:
         vcf_dir=directory(panel_dir / "background_vcfs"),
     log:
         log_dir / "extract_background_vcfs.log",
-    # container:
-    #     containers["base"]
+    container:
+        containers["base"]
     shell:
         """
         mkdir -p {output} 2> {log}
@@ -43,6 +43,8 @@ rule construct_who_panel:
         log_dir / "construct_who_panel/grading_{grade}.log",
     shadow:
         "shallow"
+    container:
+        containers["mykrobe"]
     params:
         db=".mongodb",
         db_name="who_panel",
@@ -63,8 +65,8 @@ rule construct_who_panel:
         mykrobe variants make-probes --db_name {params.db_name} -k {params.kmer_size} \
           -g {input.genbank} -t {input.panel} {input.reference} > {output.probes} 2>> {log}
 
-        date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
-        #mongod --shutdown --dbpath {params.db} 2>> {log}
+        # date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
+        # mongod --shutdown --dbpath {params.db} 2>> {log}
 
         date +"[%Y-%m-%d %H:%M:%S] Done!" >> {log}
         """

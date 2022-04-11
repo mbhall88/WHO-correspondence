@@ -37,8 +37,8 @@ for run, row in samplesheet.iterrows():
     output.add(run_info)
 
 
-# for grade in GRADES:
-#     output.add(panel_dir / f"who2021/grade_{grade}/probes.fa")
+for grade in GRADES:
+    output.add(panel_dir / f"who2021/grade_{grade}/probes.fa")
 # =====================================
 
 
