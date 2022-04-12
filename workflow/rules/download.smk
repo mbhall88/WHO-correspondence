@@ -13,3 +13,16 @@ rule download_data:
         db="ena",
     shell:
         "fastq-dl --outdir {output.outdir} {wildcards.run} {params.db} > {log} 2>&1"
+
+
+rule aggregate_run_info:
+    input:
+        dirs=expand(data_dir / "fastq/{run}", run=list(samplesheet.index))
+    output:
+        run_info=data_dir / "run_info.tsv"
+    log:
+        log_dir / "aggregate_run_info.log"
+    params:
+        delim="\t"
+    script:
+        str(scripts_dir / "aggregate_run_info.py")
