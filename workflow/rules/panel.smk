@@ -29,7 +29,7 @@ rule select_panel_variants:
     script:
         str(scripts_dir / "select_panel_variants.py")
 
-
+# adjustments are explained in https://github.com/mbhall88/WHO-correspondence/issues/4#issuecomment-1096023422
 rule construct_who_panel:
     input:
         vcf_dir=rules.extract_background_vcfs.output.vcf_dir,
@@ -49,6 +49,12 @@ rule construct_who_panel:
         db=".mongodb",
         db_name="who_panel",
         kmer_size=config["panel_kmer_size"],
+        adjustments={
+            "eis_CG-7C": "eis_CG-8C",
+            "pncA_TC-4T": "pncA_GA-5A",
+            "pncA_GTC-3GT": "pncA_GAC-5AC",
+            "pncA_GCG440GCGTACCGCGTCGCG": "pncA_CGC442CGCGACGCGGTACGC"
+        },
     shell:
         """
         date +"[%Y-%m-%d %H:%M:%S] Starting the database..." > {log}
