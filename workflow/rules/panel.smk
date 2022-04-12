@@ -26,6 +26,13 @@ rule select_panel_variants:
         resistance_json=panel_dir / "who2021/grading_{grade}/var2drug.json",
     log:
         log_dir / "select_panel_variants/grade_{grade}.log",
+    params:
+        adjustments={
+            "eis_CG-7C": "eis_CG-8C",
+            "pncA_TC-4T": "pncA_GA-5A",
+            "pncA_GTC-3GT": "pncA_GAC-5AC",
+            "pncA_GCG440GCGTACCGCGTCGCG": "pncA_CGC442CGCGACGCGGTACGC"
+        },
     script:
         str(scripts_dir / "select_panel_variants.py")
 
@@ -49,12 +56,6 @@ rule construct_who_panel:
         db=".mongodb",
         db_name="who_panel",
         kmer_size=config["panel_kmer_size"],
-        adjustments={
-            "eis_CG-7C": "eis_CG-8C",
-            "pncA_TC-4T": "pncA_GA-5A",
-            "pncA_GTC-3GT": "pncA_GAC-5AC",
-            "pncA_GCG440GCGTACCGCGTCGCG": "pncA_CGC442CGCGACGCGGTACGC"
-        },
     shell:
         """
         date +"[%Y-%m-%d %H:%M:%S] Starting the database..." > {log}
