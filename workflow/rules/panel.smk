@@ -31,7 +31,7 @@ rule select_panel_variants:
             "eis_CG-7C": "eis_CG-8C",
             "pncA_TC-4T": "pncA_GA-5A",
             "pncA_GTC-3GT": "pncA_GAC-5AC",
-            "pncA_GCG440GCGTACCGCGTCGCG": "pncA_CGC442CGCGACGCGGTACGC"
+            "pncA_CGC442CGCGACGCGGTACGC": "pncA_CGC442CGCGACGCGGTACGC"
         },
     script:
         str(scripts_dir / "select_panel_variants.py")
