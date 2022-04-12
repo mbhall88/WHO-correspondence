@@ -78,9 +78,9 @@ with open(snakemake.input.full_panel) as in_fp, open(
             continue
 
         if f"{gene}_{mut}" in adjustments:
+            seen_adjustments.add(f"{gene}_{mut}")
             variant = adjustments[f"{gene}_{mut}"]
             gene, mut = variant.split("_")
-            seen_adjustments.add(f"{gene}_{mut}")
         else:
             # The position of DNA mutations (inside genes) on the rev strand point to the *end* of the
             # reference allele. See the data cleaning notebook for an explanation
