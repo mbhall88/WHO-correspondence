@@ -4,7 +4,7 @@ set -xeo pipefail
 DEFAULT_THREADS=1
 
 function usage {
-    echo "usage: illumina_preprocess.sh -r <STR> -i <FILE> -I <DIR> -R <FILE> -o <FILE> [OPTIONS]"
+    echo "usage: illumina_preprocess.sh -r <STR> -i <FILE> -R <FILE> -o <FILE> [OPTIONS]"
     echo "   "
     echo "  -r                       : Run accession [REQUIRED]"
     echo "  -i                       : Run info TSV file [REQUIRED]"
