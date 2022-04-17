@@ -13,7 +13,7 @@ rule illumina_preprocessing:
     conda:
         str(env_dir / "fastp.yaml")
     params:
-        opts="-z 6 -l 30 --cut_tail --dedup --stdout",
+        opts="-l 30 --cut_tail --dedup --stdout",
         indelim=rules.aggregate_run_info.params.delim,
     shadow:
         "shallow"

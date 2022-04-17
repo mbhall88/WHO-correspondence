@@ -40,5 +40,5 @@ else:
 fastp_cmd = f"fastp -h {snakemake.output.report} -w {snakemake.threads} {inputs} {opts}"
 
 shell(
-    f"( {fastp_cmd} | gzip -c ) > {snakemake.output.fastq} 2>> {snakemake.log[0]}",
+    f"( {fastp_cmd} | pigz -c ) > {snakemake.output.fastq} 2>> {snakemake.log[0]}",
 )
