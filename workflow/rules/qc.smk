@@ -10,8 +10,8 @@ rule illumina_preprocessing:
         mem_mb=lambda wildcards, attempt: attempt * int(4 * GB),
     log:
         log_dir / "illumina_preprocessing/{run}.log",
-    container:
-        containers["fastp"]
+    conda:
+        str(env_dir / "fastp.yaml")
     params:
         opts="-z 6 -l 30 --cut_tail --dedup --stdout",
         indelim=rules.aggregate_run_info.params.delim,
