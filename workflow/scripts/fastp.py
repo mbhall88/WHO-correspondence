@@ -3,7 +3,7 @@ import sys
 sys.stderr = open(snakemake.log[0], "w")
 
 from pathlib import Path
-import subprocess
+from snakemake.shell import shell
 
 with open(snakemake.input.run_info) as fp:
     found_this_run = False
@@ -39,12 +39,6 @@ else:
 
 fastp_cmd = f"fastp -h {snakemake.output.report} -w {snakemake.threads} {inputs} {opts}"
 
-completed_proc = subprocess.run(
-    f"( {fastp_cmd} | gzip -c ) > {snakemake.output.fastq}",
-    shell=True,
-    text=True,
-    stderr=sys.stderr,
+shell(
+    f"( {fastp_cmd} | gzip -c ) > {snakemake.output.fastq} 2>> {snakemake.log[0]}",
 )
-
-if completed_proc.returncode != 0:
-    raise ChildProcessError("fastp command failed. Error should be above")
