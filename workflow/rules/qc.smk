@@ -3,7 +3,8 @@ rule illumina_preprocessing:
         run_dir=rules.download_data.output.outdir,
         run_info=rules.aggregate_run_info.output.run_info,
     output:
-        fastq=directory(results / "preprocessing/{run}/{run}.fq.gz"),
+        fastq=results / "preprocessing/{run}/{run}.fq.gz",
+        report=results / "preprocessing/{run}/{run}.report.html",
     threads: 2
     resources:
         mem_mb=lambda wildcards, attempt: attempt * int(4 * GB),
@@ -12,7 +13,7 @@ rule illumina_preprocessing:
     container:
         containers["fastp"]
     params:
-        opts="-z 6 -l 30 --cut_tail",
+        opts="-z 6 -l 30 --cut_tail --dedup --stdout",
         indelim=rules.aggregate_run_info.params.delim
     shadow:
         "shallow"
@@ -32,7 +33,6 @@ rule illumina_preprocessing:
         d = Path(input.run_dir)
         opts = params.opts
         inputs = "-i "
-        outputs = ""
         if layout == "SINGLE":
             fq = d / f"{run}.fastq.gz"
             if not fq.exists():
@@ -46,11 +46,13 @@ rule illumina_preprocessing:
             if not r2.exists():
                 raise FileNotFoundError(f"Expected R2 file {r2}")
             inputs += f"{r1} -I {r2}"
-            opts += " --merge"
+            opts += " --detect_adapter_for_pe"
         else:
             raise KeyError(f"Got unknown library layout {layout}")
 
-        # todo https://github.com/OpenGene/fastp#merge-paired-end-reads to use the correct output flags
+        shell("fastp -h {output.report} -w {threads} {inputs} {opts} > {output.fastq} 2> {log}")
+
+        # TODO https://github.com/OpenGene/fastp#merge-paired-end-reads to use the correct output flags
 
         #
         # cmd="""
@@ -58,4 +60,6 @@ rule illumina_preprocessing:
         #   -w {threads} -h {output.report} 2> {log}
         # """
 
-# todo: use -p option in bwa mem for smart pairing https://manpages.org/bwa
+# TODO: use -p option in bwa mem for smart pairing https://manpages.org/bwa
+
+
