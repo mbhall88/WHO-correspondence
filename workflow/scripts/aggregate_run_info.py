@@ -34,17 +34,20 @@ for d in map(Path, snakemake.input.dirs):
                 )
             if fq.exists():
                 eprint(f"[INFO]: Removing orphan SE file for {run} PE accession {fq}")
+            files = f"{r1};{r2}"
         elif not fq.exists():
             raise FileNotFoundError(f"Expected single-end library {fq}")
-        elif layout == "PAIRED":
-            eprint(
-                f"[WARNING]: Found SE reads for {run} but run info says PE library...using SE..."
-            )
+        else:  # no PE reads, but SE reads found
+            if layout == "PAIRED":
+                eprint(
+                    f"[WARNING]: Found SE reads for {run} but run info says PE library...using SE..."
+                )
+            files = str(fq)
 
         if data["tax_id"] != "1773":
             eprint(f"[WARNING]: Got non-MTB tax ID for {run} - {data['tax_id']}")
 
-    out_data.append((run, layout))
+    out_data.append((run, files))
 
 with open(snakemake.output.run_info, "w") as fp:
     print(f"run{DELIM}layout", file=fp)
