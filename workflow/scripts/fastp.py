@@ -3,6 +3,7 @@ import sys
 sys.stderr = open(snakemake.log[0], "w")
 
 from pathlib import Path
+from subprocess import run
 
 with open(snakemake.input.run_info) as fp:
     found_this_run = False
@@ -36,6 +37,14 @@ elif len(files) == 2:
 else:
     raise KeyError(f"Got unknown library layout {files}")
 
-snakemake.shell(
-    "( fastp -h {output.report} -w {threads} {inputs} {opts} | gzip -c ) > {output.fastq} 2> {log}"
+fastp_cmd = f"fastp -h {snakemake.output.report} -w {snakemake.threads} {inputs} {opts}"
+
+completed_proc = run(
+    f"( {fastp_cmd} | gzip -c ) > {snakemake.output.fastq}",
+    shell=True,
+    text=True,
+    stderr=sys.stderr,
 )
+
+if completed_proc.returncode != 0:
+    raise ChildProcessError("fastp command failed. Error should be above")
