@@ -10,15 +10,18 @@ rule illumina_preprocessing:
         mem_mb=lambda wildcards, attempt: attempt * int(4 * GB),
     log:
         log_dir / "illumina_preprocessing/{run}.log",
-    conda:
-        str(env_dir / "fastp.yaml")
+    container:
+        containers["fastp"]
     params:
         opts="-l 30 --cut_tail --dedup --stdout",
-        indelim=rules.aggregate_run_info.params.delim,
+        script=scripts_dir / "illumina_preprocess.sh",
     shadow:
         "shallow"
-    script:
-        str(scripts_dir / "fastp.py")
+    shell:
+        """
+        bash {params.script} -r {wildcards.run} -i {input.run_info} -R {output.report} \
+            -o {output.fastq} -t {threads} {params.opts} 2> {log}
+        """
 
 
 # TODO: use -p option in bwa mem for smart pairing https://manpages.org/bwa
