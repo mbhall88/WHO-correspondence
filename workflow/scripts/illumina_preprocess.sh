@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eo pipefail
+set -xeo pipefail
 
 DEFAULT_THREADS=1
 
@@ -79,12 +79,11 @@ function run {
 
     input_arg=("-i ${files[0]}")
     if [ "$n_files" -eq 2 ]; then
-        echo "got two files"
         input_arg+=("-I ${files[1]}")
         args+=("--detect_adapter_for_pe")
     fi
 
-    fastp -h "$report" -w $threads "${input_arg[*]}" "${args[*]}" | gzip -c > "$output"
+    fastp -h "$report" -w $threads ${input_arg[*]} ${args[*]} | gzip -c > "$output"
 }
 
 run "$@"

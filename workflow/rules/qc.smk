@@ -7,7 +7,7 @@ rule illumina_preprocessing:
         report=results / "preprocessing/{run}/{run}.report.html",
     threads: 2
     resources:
-        mem_mb=lambda wildcards, attempt: attempt * int(4 * GB),
+        mem_mb=lambda wildcards, attempt: attempt * int(8 * GB),
     log:
         log_dir / "illumina_preprocessing/{run}.log",
     container:
@@ -25,3 +25,4 @@ rule illumina_preprocessing:
 
 
 # TODO: use -p option in bwa mem for smart pairing https://manpages.org/bwa
+
