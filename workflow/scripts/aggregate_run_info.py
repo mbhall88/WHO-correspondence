@@ -22,23 +22,24 @@ for d in map(Path, snakemake.input.dirs):
         assert data["instrument_platform"] == "ILLUMINA", p
 
         layout = data["library_layout"]
-
-        if layout == "SINGLE":
-            fq = d / f"{run}.fastq.gz"
-            if not fq.exists():
-                raise FileNotFoundError(f"Expected single-end library {fq}")
-        elif layout == "PAIRED":
-            r1 = d / f"{run}_1.fastq.gz"
-            if not r1.exists():
-                raise FileNotFoundError(f"Expected R1 file {r1}")
+        r1 = d / f"{run}_1.fastq.gz"
+        fq = d / f"{run}.fastq.gz"
+        if r1.exists():
             r2 = d / f"{run}_2.fastq.gz"
             if not r2.exists():
-                raise FileNotFoundError(f"Expected R2 file {r2}")
-            fq = d / f"{run}.fastq.gz"
+                raise FileNotFoundError(f"Found R1 but not R2 file {r2}")
+            if layout == "SINGLE":
+                eprint(
+                    f"[WARNING]: Found PE reads for {run} but run info says SE library...using PE..."
+                )
             if fq.exists():
-                eprint(f"[INFO]: Removing orphan SE file for paired-end accession {fq}")
-        else:
-            raise KeyError(f"Got unknown library layout {layout}")
+                eprint(f"[INFO]: Removing orphan SE file for {run} PE accession {fq}")
+        elif not fq.exists():
+            raise FileNotFoundError(f"Expected single-end library {fq}")
+        elif layout == "PAIRED":
+            eprint(
+                f"[WARNING]: Found SE reads for {run} but run info says PE library...using SE..."
+            )
 
         if data["tax_id"] != "1773":
             eprint(f"[WARNING]: Got non-MTB tax ID for {run} - {data['tax_id']}")
