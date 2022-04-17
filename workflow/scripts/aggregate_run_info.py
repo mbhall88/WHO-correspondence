@@ -12,7 +12,7 @@ def eprint(msg):
     print(msg, file=sys.stderr)
 
 
-data = []
+out_data = []
 
 for d in map(Path, snakemake.input.dirs):
     run = d.parts[-1]
@@ -43,9 +43,9 @@ for d in map(Path, snakemake.input.dirs):
         if data["tax_id"] != "1773":
             eprint(f"[WARNING]: Got non-MTB tax ID for {run} - {data['tax_id']}")
 
-    data.append((run, layout))
+    out_data.append((run, layout))
 
 with open(snakemake.output.run_info, "w") as fp:
     print(f"run{DELIM}layout", file=fp)
-    for t in data:
+    for t in out_data:
         print(DELIM.join(t), file=fp)

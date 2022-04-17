@@ -36,5 +36,5 @@ else:
     raise KeyError(f"Got unknown library layout {layout}")
 
 snakemake.shell(
-    "fastp -h {output.report} -w {threads} {inputs} {opts} > {output.fastq} 2> {log}"
+    "( fastp -h {output.report} -w {threads} {inputs} {opts} | gzip -c ) > {output.fastq} 2> {log}"
 )
