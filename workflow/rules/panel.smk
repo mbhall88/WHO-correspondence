@@ -115,3 +115,16 @@ rule combine_var2drug_files:
         containers["python"]
     script:
         str(scripts_dir / "combine_var2drug_files.py")
+
+rule combine_panels:
+    input:
+        hunt2019=rules.download_mykrobe_default_panel.output.panel,
+        who2021=rules.select_panel_variants.output.panel,
+    output:
+        panel=panel_dir / "hall2022/panel.tsv"
+    log:
+        log_dir / "combine_panels.log"
+    container:
+        containers["python"]
+    script:
+        str(scripts_dir / "combine_panels.py")
