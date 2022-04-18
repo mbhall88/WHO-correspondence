@@ -76,7 +76,7 @@ rule map_to_decontam_db:
         mem_mb=lambda wildcards, attempt: attempt * int(12 * GB),
     params:
         map_extras="-M",
-        script=scripts_dir / "illumina_preprocess.sh",
+        script=scripts_dir / "map_to_decontam_db.sh",
     conda:
         str(env_dir / "aln_tools.yaml")
     log:
