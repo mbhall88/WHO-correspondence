@@ -20,7 +20,7 @@ rule extract_background_vcfs:
 rule select_panel_variants:
     input:
         full_panel=full_panel,
-        features=features
+        features=features,
     output:
         panel=panel_dir / "who2021/grading_{grade}/panel.tsv",
         resistance_json=panel_dir / "who2021/grading_{grade}/var2drug.json",
@@ -31,10 +31,11 @@ rule select_panel_variants:
             "eis_CG-7C": "eis_CG-8C",
             "pncA_TC-4T": "pncA_GA-5A",
             "pncA_GTC-3GT": "pncA_GAC-5AC",
-            "pncA_CGC442CGCGACGCGGTACGC": "pncA_CGC442CGCGACGCGGTACGC"
+            "pncA_CGC442CGCGACGCGGTACGC": "pncA_CGC442CGCGACGCGGTACGC",
         },
     script:
         str(scripts_dir / "select_panel_variants.py")
+
 
 # adjustments are explained in https://github.com/mbhall88/WHO-correspondence/issues/4#issuecomment-1096023422
 rule construct_who_panel:
@@ -76,4 +77,20 @@ rule construct_who_panel:
         mongod --shutdown --dbpath {params.db} 2>> {log}
 
         date +"[%Y-%m-%d %H:%M:%S] Done!" >> {log}
+        """
+
+
+rule download_mykrobe_default_panel:
+    output:
+        folder=directory(panel_dir / "202010"),
+    log:
+        log_dir / "download_mykrobe_default_panel.log",
+    params:
+        url="https://ndownloader.figshare.com/files/25103438",
+    container:
+        containers["base"]
+    shell:
+        """
+        mkdir -p {output.folder} 2> {log}
+        (wget {params.url} -O - | tar xzf - -C {output.folder} --strip-components 1) 2>> {log}
         """
