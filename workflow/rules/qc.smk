@@ -135,3 +135,28 @@ rule extract_decontaminated_reads:
         seqkit grep -o {output.reads} -f {input.read_ids} {input.reads} 2> {log}
         seqkit stats -a -T {output.reads} > {output.stats} 2>> {log}
         """
+
+
+rule qc_summary:
+    input:
+        stats=expand(
+            results / "filtered/{run}/{run}.filtered.stats.tsv",
+            run=list(samplesheet.index),
+        ),
+        keep_ids=expand(
+            results / "filtered/{run}/keep.reads", run=list(samplesheet.index)
+        ),
+        contam_ids=expand(
+            results / "filtered/{run}/contaminant.reads", run=list(samplesheet.index)
+        ),
+        unmapped_ids=expand(
+            results / "filtered/{run}/unmapped.reads", run=list(samplesheet.index)
+        ),
+    output:
+        summary=results / "qc.csv",
+    log:
+        log_dir / "qc_summary.log",
+    params:
+        genome_size=4411532,
+    script:
+        str(scripts_dir / "qc_summary.py")

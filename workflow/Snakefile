@@ -39,6 +39,8 @@ for run, row in samplesheet.iterrows():
 
 for grade in GRADES:
     output.add(panel_dir / f"who2021/grading_{grade}/probes.fa")
+
+output.add(results / "qc.csv")
 # =====================================
 
 
