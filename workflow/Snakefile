@@ -20,6 +20,7 @@ rules_dir = Path("workflow/rules").resolve()
 scripts_dir = Path("workflow/scripts").resolve()
 log_dir = Path("logs/stderr")
 data_dir = Path("data").resolve()
+decontam_db = data_dir / "decontam_db"
 results = Path("results").resolve()
 panel_dir = results / "panel"
 h37rv = Path(config["reference"]).resolve()
@@ -33,7 +34,7 @@ GRADES = config["grades"]
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
 for run, row in samplesheet.iterrows():
-    output.add(results / f"preprocessing/{run}/{run}.fq.gz")
+    output.add(results / f"filtered/{run}/{run}.filtered.fq.gz")
 
 
 for grade in GRADES:
@@ -49,4 +50,3 @@ rule all:
 include: rules_dir / "panel.smk"
 include: rules_dir / "download.smk"
 include: rules_dir / "qc.smk"
-
