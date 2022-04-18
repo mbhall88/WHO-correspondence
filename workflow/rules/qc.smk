@@ -34,8 +34,8 @@ rule build_decontamination_db:
     params:
         script=scripts_dir / "download_tb_reference_files.pl",
         outdir=lambda wildcards, output: Path(output.fasta).parent,
-    conda:
-        str(env_dir / "decontam_db.yaml")
+    container:
+        containers["clockwork"]
     log:
         log_dir / "build_decontamination_db.log",
     shadow:
