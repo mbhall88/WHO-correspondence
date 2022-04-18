@@ -1,6 +1,7 @@
 """Rules relating to the construction of the necessary Mykrobe panels"""
 
 
+# tarball is from https://figshare.com/articles/dataset/Mykrobe_TB_panel_background_variants/19582597
 rule extract_background_vcfs:
     input:
         tarball=config["background_variants"],
@@ -26,6 +27,8 @@ rule select_panel_variants:
         resistance_json=panel_dir / "who2021/grading_{grade}/var2drug.json",
     log:
         log_dir / "select_panel_variants/grade_{grade}.log",
+    container:
+        containers["python"]
     params:
         adjustments={
             "eis_CG-7C": "eis_CG-8C",
@@ -80,17 +83,35 @@ rule construct_who_panel:
         """
 
 
+# var2res - https://doi.org/10.6084/m9.figshare.7605428.v1
+# panel - https://doi.org/10.6084/m9.figshare.7605395.v1
 rule download_mykrobe_default_panel:
     output:
-        folder=directory(panel_dir / "202010"),
+        panel=panel_dir / "hunt2019/panel.tsv",
+        resistance_json=panel_dir / "hunt2019/var2drug.json",
     log:
         log_dir / "download_mykrobe_default_panel.log",
     params:
-        url="https://ndownloader.figshare.com/files/25103438",
+        panel_url="https://figshare.com/ndownloader/files/14120198",
+        var2drug_url="https://figshare.com/ndownloader/files/14120195",
     container:
         containers["base"]
     shell:
         """
-        mkdir -p {output.folder} 2> {log}
-        (wget {params.url} -O - | tar xzf - -C {output.folder} --strip-components 1) 2>> {log}
+        wget {params.panel_url} -O {output.panel} 2> {log}
+        wget {params.var2drug_url} -O {output.resistance_json} 2>> {log}
         """
+
+
+rule combine_var2drug_files:
+    input:
+        hunt2019=rules.download_mykrobe_default_panel.output.resistance_json,
+        who2021=rules.construct_who_panel.input.resistance_json,
+    output:
+        resistance_json=panel_dir / "hall2022/var2drug.json"
+    log:
+        log_dir / "combine_var2drug_files.log"
+    container:
+        containers["python"]
+    script:
+        str(scripts_dir / "combine_var2drug_files.py")

@@ -14,3 +14,4 @@ containers:
   mykrobe:   "docker://quay.io/mbhall88/mykrobe:141d3a3"
   fastp:     "docker://quay.io/biocontainers/fastp:0.23.2--h79da9fb_0"
   seqkit:    "docker://quay.io/biocontainers/seqkit:2.2.0--h9ee0642_0"
+  python:    "docker://python:3.9.12-alpine"
