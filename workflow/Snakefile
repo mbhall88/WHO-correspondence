@@ -28,6 +28,7 @@ annotation = Path(config["genbank"]).resolve()
 features = Path(config["features"]).resolve()
 full_panel = Path(config["full_panel"]).resolve()
 GRADES = config["grades"]
+PANELS = ["hunt2019", "who2021", "hall2022"]
 # =====================================
 
 # =====================================
@@ -51,6 +52,9 @@ for run, row in samplesheet.iterrows():
 for grade in GRADES:
     output.add(panel_dir / f"who2021/grading_{grade}/probes.fa")
 
+for panel in PANELS:
+    output.add(results / f"amr_predictions/{panel}.csv")
+
 output.add(results / "qc.csv")
 # =====================================
 
@@ -63,3 +67,4 @@ rule all:
 include: rules_dir / "panel.smk"
 include: rules_dir / "download.smk"
 include: rules_dir / "qc.smk"
+include: rules_dir / "amr.smk"
