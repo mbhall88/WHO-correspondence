@@ -1,6 +1,6 @@
 rule mykrobe_who_panel:
     input:
-        reads=rules.extract_decontaminated_reads.output.reads,
+        reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
         probes=panel_dir / "who2021/grading_2/probes.fa",
         resistance_json=panel_dir / "who2021/grading_2/var2drug.json",
     output:
@@ -37,7 +37,7 @@ rule mykrobe_who_panel:
 
 rule mykrobe_default_panel:
     input:
-        reads=rules.extract_decontaminated_reads.output.reads,
+        reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
     output:
         report=results / "amr_predictions/hunt2019/{proj}/{sample}/{run}.mykrobe.json",
     shadow:
@@ -70,7 +70,7 @@ rule mykrobe_default_panel:
 
 rule mykrobe_combined_panel:
     input:
-        reads=rules.extract_decontaminated_reads.output.reads,
+        reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
         probes=rules.construct_combined_panel.output.probes,
         resistance_json=rules.construct_combined_panel.input.resistance_json,
     output:
