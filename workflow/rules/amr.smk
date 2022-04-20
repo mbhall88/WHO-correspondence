@@ -109,6 +109,7 @@ rule combine_amr_reports:
     input:
         reports=expand(
             results / "amr_predictions/{{panel}}/{proj}/{sample}/{run}.mykrobe.json",
+            zip,
             run=RUNS,
             sample=SAMPLES,
             proj=PROJECTS,
