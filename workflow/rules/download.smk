@@ -1,8 +1,8 @@
 rule download_data:
     output:
-        outdir=directory(data_dir / "fastq/{run}"),
+        outdir=directory(data_dir / "fastq/{proj}/{sample}/{run}"),
     log:
-        log_dir / "download_data/{run}.log",
+        log_dir / "download_data/{proj}/{sample}/{run}.log",
     container:
         containers["fastq_dl"]
     shadow:
@@ -17,12 +17,17 @@ rule download_data:
 
 rule aggregate_run_info:
     input:
-        dirs=expand(data_dir / "fastq/{run}", run=list(samplesheet.index))
+        dirs=expand(
+            data_dir / "fastq/{proj}/{sample}/{run}",
+            run=RUNS,
+            sample=SAMPLES,
+            proj=PROJECTS,
+        ),
     output:
-        run_info=data_dir / "run_info.tsv"
+        run_info=data_dir / "run_info.tsv",
     log:
-        log_dir / "aggregate_run_info.log"
+        log_dir / "aggregate_run_info.log",
     params:
-        delim="\t"
+        delim="\t",
     script:
         str(scripts_dir / "aggregate_run_info.py")

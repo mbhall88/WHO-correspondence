@@ -3,13 +3,13 @@ rule illumina_preprocessing:
         run_dir=rules.download_data.output.outdir,
         run_info=rules.aggregate_run_info.output.run_info,
     output:
-        fastq=results / "preprocessing/{run}/{run}.fq.gz",
-        report=results / "preprocessing/{run}/{run}.report.html",
+        fastq=results / "preprocessing/{proj}/{sample}/{run}.fq.gz",
+        report=results / "preprocessing/{proj}/{sample}/{run}.report.html",
     threads: 2
     resources:
         mem_mb=lambda wildcards, attempt: attempt * int(8 * GB),
     log:
-        log_dir / "illumina_preprocessing/{run}.log",
+        log_dir / "illumina_preprocessing/{proj}/{sample}/{run}.log",
     container:
         containers["fastp"]
     params:
@@ -69,8 +69,8 @@ rule map_to_decontam_db:
         reads=rules.illumina_preprocessing.output.fastq,
         run_info=rules.aggregate_run_info.output.run_info,
     output:
-        bam=temp(results / "mapped/{run}/{run}.sorted.bam"),
-        index=temp(results / "mapped/{run}/{run}.sorted.bam.bai"),
+        bam=temp(results / "mapped/{proj}/{sample}/{run}.sorted.bam"),
+        index=temp(results / "mapped/{proj}/{sample}/{run}.sorted.bam.bai"),
     threads: 4
     resources:
         mem_mb=lambda wildcards, attempt: attempt * int(12 * GB),
@@ -80,7 +80,7 @@ rule map_to_decontam_db:
     conda:
         str(env_dir / "aln_tools.yaml")
     log:
-        log_dir / "map_to_decontam_db/{run}/{run}.log",
+        log_dir / "map_to_decontam_db/{proj}/{sample}/{run}.log",
     shell:
         """
         bash {params.script} -r {wildcards.run} -i {input.run_info} -R {input.reads} \
@@ -93,9 +93,9 @@ rule filter_contamination:
         bam=rules.map_to_decontam_db.output.bam,
         metadata=rules.build_decontamination_db.output.metadata,
     output:
-        keep_ids=results / "filtered/{run}/keep.reads",
-        contam_ids=results / "filtered/{run}/contaminant.reads",
-        unmapped_ids=results / "filtered/{run}/unmapped.reads",
+        keep_ids=results / "filtered/{proj}/{sample}/{run}/keep.reads",
+        contam_ids=results / "filtered/{proj}/{sample}/{run}/contaminant.reads",
+        unmapped_ids=results / "filtered/{proj}/{sample}/{run}/unmapped.reads",
     threads: 1
     resources:
         mem_mb=lambda wildcards, attempt: attempt * 4 * GB,
@@ -108,7 +108,7 @@ rule filter_contamination:
     group:
         "filter_contam"
     log:
-        log_dir / "filter_contamination/{run}/{run}.log",
+        log_dir / "filter_contamination/{proj}/{sample}/{run}.log",
     shell:
         """
         python {params.script} {params.extra} \
@@ -123,15 +123,15 @@ rule extract_decontaminated_reads:
         reads=rules.map_to_decontam_db.input.reads,
         read_ids=rules.filter_contamination.output.keep_ids,
     output:
-        reads=results / "filtered/{run}/{run}.filtered.fq.gz",
-        stats=results / "filtered/{run}/{run}.filtered.stats.tsv",
+        reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
+        stats=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.stats.tsv",
     threads: 1
     group:
         "filter_contam"
     resources:
         mem_mb=lambda wildcards, attempt: int(4 * GB) * attempt,
     log:
-        log_dir / "extract_decontaminated_reads/{run}/{run}.log",
+        log_dir / "extract_decontaminated_reads/{proj}/{sample}/{run}.log",
     container:
         containers["seqkit"]
     shell:
@@ -144,17 +144,28 @@ rule extract_decontaminated_reads:
 rule qc_summary:
     input:
         stats=expand(
-            results / "filtered/{run}/{run}.filtered.stats.tsv",
-            run=list(samplesheet.index),
+            results / "filtered/{proj}/{sample}/{run}/{run}.filtered.stats.tsv",
+            run=RUNS,
+            sample=SAMPLES,
+            proj=PROJECTS,
         ),
         keep_ids=expand(
-            results / "filtered/{run}/keep.reads", run=list(samplesheet.index)
+            results / "filtered/{proj}/{sample}/{run}/keep.reads",
+            run=RUNS,
+            sample=SAMPLES,
+            proj=PROJECTS,
         ),
         contam_ids=expand(
-            results / "filtered/{run}/contaminant.reads", run=list(samplesheet.index)
+            results / "filtered/{proj}/{sample}/{run}/contaminant.reads",
+            run=RUNS,
+            sample=SAMPLES,
+            proj=PROJECTS,
         ),
         unmapped_ids=expand(
-            results / "filtered/{run}/unmapped.reads", run=list(samplesheet.index)
+            results / "filtered/{proj}/{sample}/{run}/unmapped.reads",
+            run=RUNS,
+            sample=SAMPLES,
+            proj=PROJECTS,
         ),
     output:
         summary=results / "qc.csv",
