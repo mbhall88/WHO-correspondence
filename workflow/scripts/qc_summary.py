@@ -46,8 +46,16 @@ for s, k, c, u in it:
         n_unmapped_ids = sum(1 for line in fp)
 
     N = n_unmapped_ids + n_contam_ids + n_keep_ids
+    if N == 0:
+        f_keep = None
+        f_contam = None
+        f_unmapped = None
+    else:
+        f_keep = n_keep_ids / N
+        f_contam = n_contam_ids / N
+        f_unmapped = n_unmapped_ids / N
 
-    data.append([run, cov, n_keep_ids / N, n_contam_ids / N, n_unmapped_ids / N])
+    data.append([run, cov, f_keep, f_contam, f_unmapped])
 
 with open(snakemake.output.summary, "w") as fp:
     for row in data:
