@@ -129,7 +129,7 @@ rule extract_decontaminated_reads:
     group:
         "filter_contam"
     resources:
-        mem_mb=lambda wildcards, attempt: int(4 * GB) * attempt,
+        mem_mb=lambda wildcards, attempt: int(6 * GB) * attempt,
     log:
         log_dir / "extract_decontaminated_reads/{proj}/{sample}/{run}.log",
     container:

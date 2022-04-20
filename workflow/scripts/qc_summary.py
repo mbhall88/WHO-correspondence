@@ -5,10 +5,10 @@ sys.stderr = open(snakemake.log[0], "w")
 from pathlib import Path
 import pandas as pd
 
-stats_paths = list(map(Path, sorted(snakemake.input.stats_paths)))
-keep_ids_paths = list(map(Path, sorted(snakemake.input.keep_ids_paths)))
-contam_ids_paths = list(map(Path, sorted(snakemake.input.contam_ids_paths)))
-unmapped_ids_paths = list(map(Path, sorted(snakemake.input.unmapped_ids_paths)))
+stats_paths = list(map(Path, sorted(snakemake.input.stats)))
+keep_ids_paths = list(map(Path, sorted(snakemake.input.keep_ids)))
+contam_ids_paths = list(map(Path, sorted(snakemake.input.contam_ids)))
+unmapped_ids_paths = list(map(Path, sorted(snakemake.input.unmapped_ids)))
 
 assert (
     len(stats_paths)
