@@ -55,6 +55,6 @@ localrules: qc_summary
 
 
 include: rules_dir / "panel.smk"
-#include: rules_dir / "download.smk"
+include: rules_dir / "download.smk"
 include: rules_dir / "qc.smk"
 include: rules_dir / "amr.smk"

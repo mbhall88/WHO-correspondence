@@ -19,6 +19,7 @@ rule aggregate_run_info:
     input:
         dirs=expand(
             data_dir / "fastq/{proj}/{sample}/{run}",
+            zip,
             run=RUNS,
             sample=SAMPLES,
             proj=PROJECTS,
