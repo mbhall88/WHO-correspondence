@@ -106,25 +106,68 @@ rule download_mykrobe_default_panel:
 rule combine_var2drug_files:
     input:
         hunt2019=rules.download_mykrobe_default_panel.output.resistance_json,
-        who2021=rules.construct_who_panel.input.resistance_json,
+        resistance_json=panel_dir / "who2021/grading_2/var2drug.json",
     output:
-        resistance_json=panel_dir / "hall2022/var2drug.json"
+        resistance_json=panel_dir / "hall2022/var2drug.json",
     log:
-        log_dir / "combine_var2drug_files.log"
+        log_dir / "combine_var2drug_files.log",
     container:
         containers["python"]
     script:
         str(scripts_dir / "combine_var2drug_files.py")
 
+
 rule combine_panels:
     input:
         hunt2019=rules.download_mykrobe_default_panel.output.panel,
-        who2021=rules.select_panel_variants.output.panel,
+        who2021=panel_dir / "who2021/grading_2/panel.tsv",
     output:
-        panel=panel_dir / "hall2022/panel.tsv"
+        panel=panel_dir / "hall2022/panel.tsv",
     log:
-        log_dir / "combine_panels.log"
+        log_dir / "combine_panels.log",
     container:
         containers["python"]
     script:
         str(scripts_dir / "combine_panels.py")
+
+
+rule construct_combined_panel:
+    input:
+        vcf_dir=rules.extract_background_vcfs.output.vcf_dir,
+        reference=h37rv,
+        genbank=annotation,
+        panel=rules.combine_panels.output.panel,
+        resistance_json=rules.combine_var2drug_files.output.resistance_json,
+    output:
+        probes=panel_dir / "hall2022/probes.fa",
+    log:
+        log_dir / "construct_combined_panel.log",
+    shadow:
+        "shallow"
+    container:
+        containers["mykrobe"]
+    params:
+        db=".mongodb",
+        db_name="combined_panel",
+        kmer_size=config["panel_kmer_size"],
+    shell:
+        """
+        date +"[%Y-%m-%d %H:%M:%S] Starting the database..." > {log}
+        mkdir -p {params.db} 2>> {log}
+        mongod --quiet --dbpath {params.db} &> /dev/null &
+
+        date +"[%Y-%m-%d %H:%M:%S] Adding background variants to database..." >> {log}
+        for VCF in {input.vcf_dir}/*.vcf; do
+          date +"[%Y-%m-%d %H:%M:%S] Adding variants for $VCF"
+          mykrobe variants add -m cortex -f --db_name {params.db_name} "$VCF" {input.reference}
+        done &>> {log}
+
+        date +"[%Y-%m-%d %H:%M:%S] Making probes..." >> {log}
+        mykrobe variants make-probes --db_name {params.db_name} -k {params.kmer_size} \
+          -g {input.genbank} -t {input.panel} {input.reference} > {output.probes} 2>> {log}
+
+        date +"[%Y-%m-%d %H:%M:%S] Shutting down the database..." >> {log}
+        mongod --shutdown --dbpath {params.db} 2>> {log}
+
+        date +"[%Y-%m-%d %H:%M:%S] Done!" >> {log}
+        """

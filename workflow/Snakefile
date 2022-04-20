@@ -34,7 +34,11 @@ GRADES = config["grades"]
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
 for run, row in samplesheet.iterrows():
-    output.add(results / f"filtered/{run}/{run}.filtered.fq.gz")
+    proj = row["bioproject"]
+    sample = row["biosample"]
+    output.add(results / f"amr_predictions/hall2022/{proj}/{sample}/{run}.mykrobe.tsv")
+    output.add(results / f"amr_predictions/hunt2019/{proj}/{sample}/{run}.mykrobe.tsv")
+    output.add(results / f"amr_predictions/who2021/{proj}/{sample}/{run}.mykrobe.tsv")
 
 
 for grade in GRADES:
