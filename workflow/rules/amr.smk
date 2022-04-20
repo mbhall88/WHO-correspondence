@@ -116,7 +116,7 @@ rule combine_amr_reports:
     output:
         report=results / "amr_predictions/{panel}.csv",
     log:
-        log_dir / "combine_amr_reports.log"
+        log_dir / "combine_amr_reports/{panel}.log"
     container:
         containers["python"]
     script:
