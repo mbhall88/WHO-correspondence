@@ -30,7 +30,7 @@ rule mykrobe_who_panel:
     shell:
         """
         mykrobe predict {params.opts} -o {output.report} -i {input.reads} \
-          --sample {wildcards.sample} -t {threads} -m {resources.mem_mb}MB \
+          --sample {wildcards.run} -t {threads} -m {resources.mem_mb}MB \
           -P {input.probes} -R {input.resistance_json} > {log} 2>&1
         """
 
@@ -64,7 +64,7 @@ rule mykrobe_default_panel:
     shell:
         """
         mykrobe predict {params.opts} -o {output.report} -i {input.reads} \
-          --sample {wildcards.sample} -t {threads} -m {resources.mem_mb}MB > {log} 2>&1
+          --sample {wildcards.run} -t {threads} -m {resources.mem_mb}MB > {log} 2>&1
         """
 
 
@@ -100,6 +100,6 @@ rule mykrobe_combined_panel:
     shell:
         """
         mykrobe predict {params.opts} -o {output.report} -i {input.reads} \
-          --sample {wildcards.sample} -t {threads} -m {resources.mem_mb}MB \
+          --sample {wildcards.run} -t {threads} -m {resources.mem_mb}MB \
           -P {input.probes} -R {input.resistance_json} > {log} 2>&1
         """
