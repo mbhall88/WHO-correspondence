@@ -32,9 +32,9 @@ PANELS = ["hunt2019", "who2021", "hall2022"]
 # =====================================
 
 # =====================================
-RUNS = []
-SAMPLES = []
-PROJECTS = []
+RUNS = list(samplesheet.index)
+SAMPLES = list(samplesheet["biosample"])
+PROJECTS = list(samplesheet["bioproject"])
 
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
