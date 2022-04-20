@@ -38,19 +38,6 @@ PROJECTS = []
 
 # Generate the set of required output files from the pipeline
 output: Set[Path] = set()
-for run, row in samplesheet.iterrows():
-    proj = row["bioproject"]
-    sample = row["biosample"]
-    RUNS.append(run)
-    SAMPLES.append(sample)
-    PROJECTS.append(proj)
-    output.add(results / f"amr_predictions/hall2022/{proj}/{sample}/{run}.mykrobe.tsv")
-    output.add(results / f"amr_predictions/hunt2019/{proj}/{sample}/{run}.mykrobe.tsv")
-    output.add(results / f"amr_predictions/who2021/{proj}/{sample}/{run}.mykrobe.tsv")
-
-
-for grade in GRADES:
-    output.add(panel_dir / f"who2021/grading_{grade}/probes.fa")
 
 for panel in PANELS:
     output.add(results / f"amr_predictions/{panel}.csv")
