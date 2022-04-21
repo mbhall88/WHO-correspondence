@@ -47,9 +47,9 @@ for s, k, c, u in it:
 
     N = n_unmapped_ids + n_contam_ids + n_keep_ids
     if N == 0:
-        f_keep = None
-        f_contam = None
-        f_unmapped = None
+        f_keep = ""
+        f_contam = ""
+        f_unmapped = ""
     else:
         f_keep = n_keep_ids / N
         f_contam = n_contam_ids / N
