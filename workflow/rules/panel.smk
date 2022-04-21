@@ -106,7 +106,7 @@ rule download_mykrobe_default_panel:
 rule combine_var2drug_files:
     input:
         hunt2019=rules.download_mykrobe_default_panel.output.resistance_json,
-        resistance_json=panel_dir / "who2021/grading_2/var2drug.json",
+        who2021=panel_dir / "who2021/grading_2/var2drug.json",
     output:
         resistance_json=panel_dir / "hall2022/var2drug.json",
     log:
