@@ -131,13 +131,28 @@ rule combine_panels:
         str(scripts_dir / "combine_panels.py")
 
 
+rule deduplicate_panel:
+    input:
+        resistance_json=rules.combine_var2drug_files.output.resistance_json,
+        panel=rules.combine_panels.output.panel,
+    output:
+        panel=panel_dir / "hall2022/panel.dedup.tsv",
+        resistance_json=panel_dir / "hall2022/var2drug.dedup.json",
+    log:
+        log_dir / "deduplicate_panel.log",
+    container:
+        containers["python"]
+    script:
+        str(scripts_dir / "deduplicate_panel.py")
+
+
 rule construct_combined_panel:
     input:
         vcf_dir=rules.extract_background_vcfs.output.vcf_dir,
         reference=h37rv,
         genbank=annotation,
-        panel=rules.combine_panels.output.panel,
-        resistance_json=rules.combine_var2drug_files.output.resistance_json,
+        panel=rules.deduplicate.output.panel,
+        resistance_json=rules.deduplicate_panel.output.resistance_json,
     output:
         probes=panel_dir / "hall2022/probes.fa",
     log:
