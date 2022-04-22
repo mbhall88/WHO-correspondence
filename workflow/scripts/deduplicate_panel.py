@@ -3,6 +3,7 @@ import sys
 sys.stderr = open(snakemake.log[0], "w")
 
 import json
+import re
 from collections import defaultdict
 
 
