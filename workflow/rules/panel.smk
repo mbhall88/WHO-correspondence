@@ -151,7 +151,7 @@ rule construct_combined_panel:
         vcf_dir=rules.extract_background_vcfs.output.vcf_dir,
         reference=h37rv,
         genbank=annotation,
-        panel=rules.deduplicate.output.panel,
+        panel=rules.deduplicate_panel.output.panel,
         resistance_json=rules.deduplicate_panel.output.resistance_json,
     output:
         probes=panel_dir / "hall2022/probes.fa",
