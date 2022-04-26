@@ -8,7 +8,7 @@ rule mykrobe_who_panel:
     shadow:
         "shallow"
     resources:
-        mem_mb=int(2 * GB),
+        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
     container:
         containers["mykrobe"]
     group:
@@ -43,7 +43,7 @@ rule mykrobe_default_panel:
     shadow:
         "shallow"
     resources:
-        mem_mb=int(2 * GB),
+        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
     container:
         containers["mykrobe"]
     group:
@@ -80,7 +80,7 @@ rule mykrobe_combined_panel:
     group:
         "mykrobe"
     resources:
-        mem_mb=int(2 * GB),
+        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
     container:
         containers["mykrobe"]
     log:
