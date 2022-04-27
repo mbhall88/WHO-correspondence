@@ -97,6 +97,18 @@ This is the report downloaded for bioproject [PRJNA385247](https://www.ebi.ac.uk
 
 It can be used to map the isolates from `bainomugisa-pza-phenotypes.csv` to ENA run accessions.
 
+## `smith-PRJNA650381.tsv`
+
+This is the accessions for the Illumina data from https://doi.org/10.1128/JCM.00583-20
+
+It was provided by Pascal Lapierre via email as the Illumina data was not part of the original submission, but has now been added to the same bioproject as the nanopore data.
+
+## `smith-phenotypes.csv`
+
+These phenotypes were taken from [Supplementary table 6](https://journals.asm.org/doi/suppl/10.1128/JCM.00583-20/suppl_file/jcm.00583-20-s0006.xlsx) of https://doi.org/10.1128/JCM.00583-20
+
+I extracted the DST phenotypes only and removed all other gDST columns. The sample names can be used to match the phenotypes to the accessions in `smith-PRJNA650381.tsv`. I also changed the FLQ column to Ofloxacin as they state in the paper that they only did CFX DST and that it was considered a proxy for all fluoroquinolones.
+
 ## `samplesheet.csv`
 
 This is the "master" sheet for this project. See
