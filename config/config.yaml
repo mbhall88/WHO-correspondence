@@ -5,6 +5,9 @@ features:            "resources/NC_000962.3.gff3"
 background_variants: "resources/mykrobe_background_variant_vcfs.tar.gz"
 full_panel:          "docs/who-panel.tsv"
 panel_kmer_size:     21
+cov_threshold:       15  # any sample with covg below this will be excluded from the report
+conf_interval:       95  # confidence interval bars on plot
+minor_is_susceptible: False
 grades: # grading levels to build panels for
   - 2
 containers:

@@ -1,0 +1,11 @@
+name: report
+channels:
+  - conda-forge
+dependencies:
+  - python =3.10
+  - jupyter =1.0
+  - jupyterlab_code_formatter =1.4
+  - matplotlib-base =3.5
+  - pandas =1.4
+  - numpy =1.22
+  - scipy =1.8
