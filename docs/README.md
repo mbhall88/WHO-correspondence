@@ -170,3 +170,9 @@ This file is intended to be used for constructing a Mykrobe custom panel, with t
 removal of the header, grading column, and drugs column. In addition, it is used to
 construct the `var2res.json` file Mykrobe uses to map variants to the drug(s) they are
 associated with.
+
+## `who-results.csv`
+
+These are the raw sensitivity and specificity numbers used to make figure 3 in the WHO catalogue paper.
+
+It was taken from pages 7-9 of the [WHO catalogue report](https://www.who.int/publications/i/item/9789240028173).
