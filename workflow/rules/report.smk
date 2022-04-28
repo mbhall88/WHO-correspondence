@@ -5,7 +5,7 @@ rule report:
         samplesheet=config["samplesheet"],
     output:
         table=results / "report/results.csv",
-        plots=multiext(results / "report/plot", ".png", ".svg"),
+        plots=multiext(str(results / "report/plot"), ".png", ".svg"),
     resources:
         mem_mb=2 * GB,
     params:
