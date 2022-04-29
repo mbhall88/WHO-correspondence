@@ -1,0 +1,14 @@
+drugs	sensitivity pv	sensitivity delta (%)	specificity pv	specificity delta (%)
+Amikacin	0.81	0.7	0.0044	-0.6
+Capreomycin	1	0	0.68	-0.1
+Delamanid	NA	NA	NA	NA
+Ethambutol	0.65	1.1	0.93	-0.1
+Ethionamide	NA	NA	NA	NA
+Isoniazid	0.78	0.3	1	0
+Kanamycin	0.00026	11.9	0.04	-0.4
+Levofloxacin	NA	NA	NA	NA
+Linezolid	NA	NA	NA	NA
+Moxifloxacin	0.78	0.7	0.78	-0.1
+Pyrazinamide	1e-07	11.8	0.54	-0.2
+Rifampicin	0.59	0.5	0.71	0.1
+Streptomycin	0.021	5.5	0.00026	-4
