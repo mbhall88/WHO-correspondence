@@ -3,6 +3,7 @@ rule report:
         qc=rules.qc_summary.output.summary,
         csvs=expand(results / "amr_predictions/{panel}.csv", panel=PANELS),
         samplesheet=config["samplesheet"],
+        who_results=config["who_results"],
     output:
         table=results / "report/results.csv",
         plots=multiext(str(results / "report/plot"), ".png", ".svg"),
@@ -16,6 +17,7 @@ rule report:
         conf_interval=config["conf_interval"],
         minor_is_susceptible=config["minor_is_susceptible"],
         panel_names={
+            "previous": "Paper",
             "who2021": "WHO only",
             "hunt2019": "Mykrobe",
             "hall2022": "Combined",
