@@ -141,3 +141,4 @@ names(tab_all) = (types)
 
 all_res1=.calcAllP1(tab_all,comparison=c("WHO","Combined"))
 all_res1=.calcAllP1(tab_all,comparison=c("Mykrobe","Combined"))
+all_res1=.calcAllP1(tab_all,comparison=c("Mykrobe","WHO"))
