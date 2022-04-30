@@ -1,13 +1,21 @@
+##FUNCTIONS
+
 .getNP<-function(v1, z=1.96){
   v =sort(v1)
   #p=(v[1]+v[3])/2; # 
   p = v[2]
   lower=v[1]; upper=v[3]
-  err1= abs(upper-p)
-  N1= z^2/err1^2 * p*(1-p)
-  err1= abs(lower-p)
-  N2 = z^2/err1^2 * p*(1-p)
-  N = (N1+N2)/2
+  
+  if(TRUE){
+   err= (upper-lower)/2
+    N= (z^2/err^2) * p*(1-p)-2
+  }else{
+    err1= abs(upper-p)
+    N1= z^2/err1^2 * p*(1-p)
+    err1= abs(lower-p)
+    N2 = z^2/err1^2 * p*(1-p)
+    N = (N1+N2)/2
+  }
  res =  as.list(c(v[2],N))
  names(res) = c("p","N")
  res
@@ -18,10 +26,11 @@
 ##v1 is c(lower,p,upper)
 #v2 is c(lower,p,upper)
 #second minus first
+#adjusted wald, see https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/diffprop.htm
 .getDiff<-function(v1,v2,z=1.96){
    s1 = .getNP(v1,z=z)
    s2 = .getNP(v2,z=z)
-   diff = z* sqrt(s1$p*(1-s1$p)/s1$N  + s2$p*(1-s2$p)/s2$N )
+   diff = z* sqrt(s1$p*(1-s1$p)/(s1$N+2)  + s2$p*(1-s2$p)/(s2$N+2) )
    mid = s2$p-s1$p
 v3=   c(mid-diff,mid, mid+diff)
   v3
@@ -37,35 +46,6 @@ v3=   c(mid-diff,mid, mid+diff)
   2* pnorm(-abs(zscore))
 }
 
-##example 
-v1 = c(84.9, 80.5,88.4)/100
-v2=c(77.3 ,74.9,79.5)/100
-v3=.getDiff(v1,v2)
-pv=.calcP(v3)
-sprintf("%5.3g",pv)
-#.getN(p,l,u)
-
-setwd("../pvalues")
-
-tab=read.csv("who-results.csv")
-types = c("sensitivity","specificity")
-walker_res=lapply(types,function(x){
- t =  apply(tab[,grep(x,names(tab))],c(1,2),function(y)y/100)
- dimnames(t)[[1]] = tolower(tab[,1])
- dimnames(t)[[2]] = paste(1:3,"Walker")
- t
-})
-
-sn_who=read.csv("sn_who.csv")
-sp_who=read.csv("sp_who.csv")
-who_res = lapply(list(sensitivity=sn_who, specificity=sp_who), function(t){
-  t1 = t[,-(1:2)]
-  dimnames(t1)[[1]] = tolower(t[,1])
-  dimnames(t1)[[2]] = paste(1:3,"WHO")
-  t1
-})
-names(who_res)=types
-names(walker_res) = types
 
 .merge<-function(tab1,tab2){
   mi = match(dimnames(tab1)[[1]],dimnames(tab2)[[1]])
@@ -73,72 +53,180 @@ names(walker_res) = types
   tab_all
 }
 
-tabs = list()
-for(i in 1:length(walker_res)){
-  tabs[[i]] = .merge(walker_res[[i]], who_res[[i]])
+.conv<-function(str){
+  as.numeric(strsplit(gsub("-"," ",gsub("[%())]","",str))," ")[[1]])/100
 }
-names(tabs) = names(walker_res)
 
-.calcAllP<-function(tab,comparison){
+
+
+.calcAllP<-function(tab,comparison,CI_in=0.95, CI_out=0.95){
+  
   cols1 = grep(comparison[[1]], names(tab))
   cols2 = grep(comparison[[2]], names(tab))
+  z_in = qnorm((1-CI_in)/2, lower.tail=F)
+  z_out= qnorm((1-CI_out)/2, lower.tail=F)
   pvs=apply(tab,1, function(v){
-    v3=.getDiff(v[cols1],v[cols2])
-    pv=.calcP(v3)
-    c(pv, 100*v3[2])
+    v3=.getDiff(v[cols1],v[cols2], z = z_in)
+    pv=.calcP(v3,z=z_out)
+    c(pv, 100*v3[2], 100*v3[1],100*v3[3])
   })
   pvs
 }
-
-.calcAllP1<-function(tabs,comparison){
+##CI_in is assumed confidence levels of tables
+##CI_out is desired confidence interval for result
+.calcAllP1<-function(tabs,comparison, CI_in = 0.95, CI_out=0.95){
   outfile=paste(c("pval",comparison,"csv"),collapse=".")
-  res = lapply(tabs, .calcAllP, comparison)
+  res = lapply(tabs, .calcAllP, comparison, CI_in, CI_out)
   df = data.frame(cbind(t(res[[1]]), t(res[[2]])))
-names(df) = unlist(lapply(names(tabs), function(x) paste(x,c("pv","delta (%)"))))
- df[,1] = gsub(" ","",sprintf("%3.2g",df[,1]))
- df[,3] = gsub(" ","",sprintf("%3.2g",df[,3]))
- df[,2] =round(df[,2]*10)/10
- df[,4] =round(df[,4]*10)/10
- drugs = dimnames(df)[[1]]
- write.table(cbind(drugs,df),quote=F,row.names=F,sep="\t",file=outfile)
- invisible(df)
+  names(df) = unlist(lapply(names(tabs), function(x) paste(x,c("pv","delta (%)","delta lower(%)", "delta upper(%)"))))
+  df
 }
 
-all_res=.calcAllP1(tabs,comparison=c("Walker","WHO"))
-
-
-allres1 = read.csv("results.csv")
-.conv<-function(str){
-  as.numeric(strsplit(gsub("-"," ",gsub("[%())]","",str))," ")[[1]])/100
+.conv1<-function(v){
+  v[1] =  round(v[1]*10)/10
+  v[2] = round(v[2]*10)/10
+  v[3] = round(v[3]*10)/10
+  paste0(v[1]," (",v[2],",",v[3],")")
+}
+.formatTable<-function(df){
   
+  
+  df[,1] = gsub(" ","",sprintf("%3.2g",df[,1]))
+  df[,5] = gsub(" ","",sprintf("%3.2g",df[,5]))
+  df[,2] =apply(df[,2:4],1,.conv1)
+  df[,6] =apply(df[,6:8],1,.conv1)
+  Drug = dimnames(df)[[1]]
+  cbind(Drug, df[,c(1,2,5,6)])
+  #write.table(cbind(drugs,df),quote=F,row.names=F,sep="\t",file=outfile)
+ 
 }
-df2 =data.frame( t(data.frame(apply(res1,1, function(x){
-  c(.conv(x[5]),.conv(x[6]))
-}))))
-names(df2) = c(paste("sensitivity",1:3),paste("specificity",1:3))
 
-df3=cbind(res1[,1:2],df2)
-dimnames(df3)[[1]]=1:nrow(df3)
-#df3
-tab_all = lapply(types, function(x) {
-  t =  df3[,c(1,2,grep(x,names(df3)))]
-  t$Panel = factor(t$Panel)
-  t1 = lapply(levels(t$Panel), function(y){
-    t[t$Panel==y,]
+
+##example 
+#v1 = c(84.9, 80.5,88.4)/100
+#v2=c(77.3 ,74.9,79.5)/100
+#v3=.getDiff(v1,v2)
+#pv=.calcP(v3)
+#sprintf("%5.3g",pv)
+#.getN(p,l,u)
+
+setwd("../pvalues")
+
+##READ AND REFORMAT
+.readWalker<-function(file="who-results.csv",  types = c("sensitivity","specificity")){
+  tab=read.csv("who-results.csv")
+
+  walker_res=lapply(types,function(x){
+   t =  apply(tab[,grep(x,names(tab))],c(1,2),function(y)y/100)
+   dimnames(t)[[1]] = tolower(tab[,1])
+   dimnames(t)[[2]] = paste(1:3,"Walker")
+   t
   })
-  names(t1) = levels(t$Panel)
-  t2 =t1[[1]][-(1:2)]
-  dimnames(t2)[[1]] = t1[[1]][,1]
-  nmes = c( paste(1:3,names(t1)[[1]]))
-  for(j in 2:length(t1)){
-    t2 = cbind(t2,t1[[j]][-(1:2)])
-    nmes = c(nmes,paste(1:3,names(t1)[[j]]))
-  }
-  names(t2) = nmes
-  t2
-})
-names(tab_all) = (types)
+  names(walker_res) = types
+  walker_res
+}
 
-all_res1=.calcAllP1(tab_all,comparison=c("WHO","Combined"))
-all_res1=.calcAllP1(tab_all,comparison=c("Mykrobe","Combined"))
-all_res1=.calcAllP1(tab_all,comparison=c("Mykrobe","WHO"))
+
+.readWHO<-function(f1 = "sn_who.csv",f2 ="sp_who.csv", types = c("sensitivity","specificity") ){
+    sn_who=read.csv(f1)
+    sp_who=read.csv(f2)
+    who_res = lapply(list(sensitivity=sn_who, specificity=sp_who), function(t){
+      t1 = t[,-(1:2)]
+      dimnames(t1)[[1]] = tolower(t[,1])
+      dimnames(t1)[[2]] = paste(1:3,"WHO")
+      t1
+    })
+    names(who_res)=types
+    who_res
+}
+
+
+
+.mergeWalkerWHO<-function(walker_res, who_res){
+  tabs = list()
+  for(i in 1:length(walker_res)){
+    tabs[[i]] = .merge(walker_res[[i]], who_res[[i]])
+  }
+  names(tabs) = names(walker_res)
+  tabs
+}
+
+
+
+#FOR COMPARING COMBINATIONS
+.readResults1<-function(file="results.csv"){
+  allres1 = read.csv(file)
+  df2 =data.frame( t(data.frame(apply(res1,1, function(x){
+    c(.conv(x[5]),.conv(x[6]))
+  }))))
+  names(df2) = c(paste("sensitivity",1:3),paste("specificity",1:3))
+  df3=cbind(res1[,1:2],df2)
+  dimnames(df3)[[1]]=1:nrow(df3)
+  #df3
+  tab_all = lapply(types, function(x) {
+    t =  df3[,c(1,2,grep(x,names(df3)))]
+    t$Panel = factor(t$Panel)
+    t1 = lapply(levels(t$Panel), function(y){
+      t[t$Panel==y,]
+    })
+    names(t1) = levels(t$Panel)
+    t2 =t1[[1]][-(1:2)]
+    dimnames(t2)[[1]] = t1[[1]][,1]
+    nmes = c( paste(1:3,names(t1)[[1]]))
+    for(j in 2:length(t1)){
+      t2 = cbind(t2,t1[[j]][-(1:2)])
+      nmes = c(nmes,paste(1:3,names(t1)[[j]]))
+    }
+    names(t2) = nmes
+    t2
+  })
+  names(tab_all) = (types)
+  tab_all
+}
+
+
+walker_res = .readWalker("who-results.csv")
+who_res = .readWHO("sn_who.csv", "sp_who.csv")
+tabs = .mergeWalkerWHO(walker_res,who_res)
+tab_all=.readResults1("results.csv")
+
+
+
+all_res=list(.calcAllP1(tabs,comparison=c("Walker","WHO")))
+names(all_res)="Walker et al vs WHO"
+comparisons = list(c("WHO","Combined"),c("Mykrobe","Combined"),c("Mykrobe","WHO"))
+all_res1= lapply(comparisons, function(x) .calcAllP1(tab_all,comparison=x))
+ names(all_res1) = unlist(lapply(comparisons, function(x) paste(rev(x),collapse=" vs ")))
+ all_res2 = c(all_res, all_res1)
+ 
+formatted=lapply(all_res2, .formatTable)
+mi =  match(tolower(dimnames(formatted[[2]])[[1]]),dimnames(formatted[[1]])[[1]])
+formatted[[1]] = formatted[[1]][mi,]
+formatted[[1]][,1] = formatted[[2]][,1]
+dimnames(formatted[[1]])[[1]] = dimnames(formatted[[2]])[[1]]
+
+
+.writeTable<-function(tab,file, sep){
+ for(j in 1:nrow(tab)){
+   writeLines( paste(tab[j,],collapse=" & "),con=file,sep=sep)
+   
+ }
+}
+
+.writeLatexTable<-function(formatted,outfile="latex.txt"){
+ 
+  out=file(outfile,"wt")
+  sep=" eol \n"
+  nmes1 = unlist(lapply(names(formatted[[1]]), function(x) paste0("\\textbf{",x,"}")))
+  writeLines( paste(nmes1,collapse=" & "),con=out,sep=sep)
+  line1="\\multicolumn{_n_}{c}{\\textbf{_entry_}}"
+for(i in 1:length(formatted)){
+ line2=gsub("_entry_", names(formatted)[[i]],gsub("_n_", ncol(formatted[[i]]), line1))
+  writeLines(line2, con=out,sep=sep)
+  .writeTable(formatted[[i]], file=out,sep=sep)
+}
+  close(out)  
+}
+
+.writeLatexTable(formatted,"pvals.tex")
+closeAllConnections()
