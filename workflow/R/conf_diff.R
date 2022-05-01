@@ -228,5 +228,5 @@ for(i in 1:length(formatted)){
   close(out)  
 }
 
-.writeLatexTable(formatted,"pvals.tex")
+.writeLatexTable(formatted,"pvals1.tex")
 closeAllConnections()
