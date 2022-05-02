@@ -1,14 +1,21 @@
 ##FUNCTIONS
 
 .getNP<-function(v1, z=1.96){
-  v =sort(v1)
+ 
   #p=(v[1]+v[3])/2; # 
   p = v[2]
+#  if(length(v==0)) return (NULL)
+#  if(v[2]==0) v[2] = (v[1]+v[3])/2  #to avoid NA
   lower=v[1]; upper=v[3]
   
   if(TRUE){
    err= (upper-lower)/2
-    N= (z^2/err^2) * p*(1-p)-2
+  #if(p<0.0000001) p = (upper+lower)/2
+    N= (z^2/err^2) * p*(1-p)
+   # if(N==0){
+    #  p = (lower +upper)/2
+    #  N= (z^2/err^2) * p*(1-p)
+    #}  
   }else{
     err1= abs(upper-p)
     N1= z^2/err1^2 * p*(1-p)
@@ -27,15 +34,23 @@
 #v2 is c(lower,p,upper)
 #second minus first
 #adjusted wald, see https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/diffprop.htm
-.getDiff<-function(v1,v2,z=1.96){
+.getDiff<-function(v1_,v2_,z=1.96){
+  v1 =sort(v1_,na.last=T)
+  v2 = sort(v2_,na.last=T)
+  if(length(which(is.na(v1)))>0 || length(which(is.na(v2)))) return (c(NA,NA,NA))
+  if(!is.na(v1[2]) && (v1[2]==0 || v1[2] ==1) )v1[2] = (v1[1]+v1[3])/2.0
+  if(!is.na(v2[2]) && (v2[2]==0 || v2[2] ==1) )v2[2] = (v2[1]+v2[3])/2.0
+  
    s1 = .getNP(v1,z=z)
    s2 = .getNP(v2,z=z)
    diff = z* sqrt(s1$p*(1-s1$p)/(s1$N+2)  + s2$p*(1-s2$p)/(s2$N+2) )
    mid = s2$p-s1$p
+  
 v3=   c(mid-diff,mid, mid+diff)
   v3
   
 }
+
 
 .calcP<-function(v3, z=1.96,x=0){
   diff = (v3[3] - v3[1])/2
@@ -56,6 +71,7 @@ v3=   c(mid-diff,mid, mid+diff)
 .conv<-function(str){
   as.numeric(strsplit(gsub("-"," ",gsub("[%())]","",str))," ")[[1]])/100
 }
+
 
 
 
@@ -96,7 +112,7 @@ v3=   c(mid-diff,mid, mid+diff)
   df[,2] =apply(df[,2:4],1,.conv1)
   df[,6] =apply(df[,6:8],1,.conv1)
   Drug = dimnames(df)[[1]]
-  cbind(Drug, df[,c(1,2,5,6)])
+  apply(cbind(Drug, df[,c(1,2,5,6)]),c(1,2), function(x) if(length(grep("NA",x))>0) "-" else x)
   #write.table(cbind(drugs,df),quote=F,row.names=F,sep="\t",file=outfile)
  
 }
@@ -154,13 +170,13 @@ setwd("../pvalues")
 
 
 #FOR COMPARING COMBINATIONS
-.readResults1<-function(file="results.csv"){
+.readResults1<-function(file="results.csv", types=c("sensitivity","specificity")){
   allres1 = read.csv(file)
-  df2 =data.frame( t(data.frame(apply(res1,1, function(x){
+  df2 =data.frame( t(data.frame(apply(allres1,1, function(x){
     c(.conv(x[5]),.conv(x[6]))
   }))))
   names(df2) = c(paste("sensitivity",1:3),paste("specificity",1:3))
-  df3=cbind(res1[,1:2],df2)
+  df3=cbind(allres1[,1:2],df2)
   dimnames(df3)[[1]]=1:nrow(df3)
   #df3
   tab_all = lapply(types, function(x) {
@@ -185,26 +201,6 @@ setwd("../pvalues")
 }
 
 
-walker_res = .readWalker("who-results.csv")
-who_res = .readWHO("sn_who.csv", "sp_who.csv")
-tabs = .mergeWalkerWHO(walker_res,who_res)
-tab_all=.readResults1("results.csv")
-
-
-
-all_res=list(.calcAllP1(tabs,comparison=c("Walker","WHO")))
-names(all_res)="Walker et al vs WHO"
-comparisons = list(c("WHO","Combined"),c("Mykrobe","Combined"),c("Mykrobe","WHO"))
-all_res1= lapply(comparisons, function(x) .calcAllP1(tab_all,comparison=x))
- names(all_res1) = unlist(lapply(comparisons, function(x) paste(rev(x),collapse=" vs ")))
- all_res2 = c(all_res, all_res1)
- 
-formatted=lapply(all_res2, .formatTable)
-mi =  match(tolower(dimnames(formatted[[2]])[[1]]),dimnames(formatted[[1]])[[1]])
-formatted[[1]] = formatted[[1]][mi,]
-formatted[[1]][,1] = formatted[[2]][,1]
-dimnames(formatted[[1]])[[1]] = dimnames(formatted[[2]])[[1]]
-
 
 .writeTable<-function(tab,file, sep){
  for(j in 1:nrow(tab)){
@@ -228,5 +224,27 @@ for(i in 1:length(formatted)){
   close(out)  
 }
 
-.writeLatexTable(formatted,"pvals1.tex")
+
+walker_res = .readWalker("who-results.csv",types=c("sensitivity","specificity"))
+who_res = .readWHO("sn_who.csv", "sp_who.csv")
+tabs = .mergeWalkerWHO(walker_res,who_res)
+tab_all=.readResults1("results.csv",types=c("sensitivity","specificity"))
+
+
+
+all_res=list(.calcAllP1(tabs,comparison=c("Walker","WHO")))
+names(all_res)="Walker et al vs WHO"
+comparisons = list(c("WHO","Combined"),c("Mykrobe","Combined"),c("Mykrobe","WHO"))
+all_res1= lapply(comparisons, function(x) .calcAllP1(tab_all,comparison=x))
+names(all_res1) = unlist(lapply(comparisons, function(x) paste(rev(x),collapse=" vs ")))
+all_res2 = c(all_res, all_res1)
+
+formatted=lapply(all_res2, .formatTable)
+mi =  match(tolower(dimnames(formatted[[2]])[[1]]),dimnames(formatted[[1]])[[1]])
+formatted[[1]] = formatted[[1]][mi,]
+formatted[[1]][,1] = formatted[[2]][,1]
+dimnames(formatted[[1]])[[1]] = dimnames(formatted[[2]])[[1]]
+
+
+.writeLatexTable(formatted,"pvals3.tex")
 closeAllConnections()
