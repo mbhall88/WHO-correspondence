@@ -159,3 +159,5 @@ Backup of *.doc*
 
 # End of https://www.toptal.com/developers/gitignore/api/microsoftoffice
 tmp
+docs/submission
+.DS_Store
