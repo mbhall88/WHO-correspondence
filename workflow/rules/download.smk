@@ -1,6 +1,7 @@
 rule download_data:
     output:
         outdir=directory(data_dir / "fastq/{proj}/{sample}/{run}"),
+        run_info=data_dir / "fastq/{proj}/{sample}/{run}/fastq-run-info.json",
     log:
         log_dir / "download_data/{proj}/{sample}/{run}.log",
     container:
