@@ -5,8 +5,6 @@ rule download_data:
         log_dir / "download_data/{proj}/{sample}/{run}.log",
     container:
         containers["fastq_dl"]
-    shadow:
-        "shallow"
     resources:
         mem_mb=int(0.5 * GB),
     params:
