@@ -13,7 +13,7 @@ grades: # grading levels to build panels for
   - 2
 containers:
   base:      "docker://bash:5.1"
-  fastq_dl:  "docker://quay.io/mbhall88/fastq-dl:081ecd3"
+  fastq_dl:  "docker://quay.io/mbhall88/fastq-dl:4fe5719"
   clockwork: "docker://quay.io/mbhall88/clockwork:fe62f00"
   mykrobe:   "docker://quay.io/mbhall88/mykrobe:b6d0f37"
   fastp:     "docker://quay.io/biocontainers/fastp:0.23.2--h79da9fb_0"
