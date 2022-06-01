@@ -69,8 +69,8 @@ rule map_to_decontam_db:
         reads=rules.illumina_preprocessing.output.fastq,
         run_info=rules.aggregate_run_info.output.run_info,
     output:
-        bam=temp(results / "mapped/{proj}/{sample}/{run}.sorted.bam"),
-        index=temp(results / "mapped/{proj}/{sample}/{run}.sorted.bam.bai"),
+        bam=results / "mapped/{proj}/{sample}/{run}.sorted.bam",
+        index=results / "mapped/{proj}/{sample}/{run}.sorted.bam.bai",
     threads: 4
     resources:
         mem_mb=lambda wildcards, attempt: attempt * int(12 * GB),
