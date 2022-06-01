@@ -105,8 +105,6 @@ rule filter_contamination:
         script=scripts_dir / "filter_contamination.py",
         extra="--ignore-secondary",
         outdir=lambda wildcards, output: Path(output.keep_ids).parent,
-    group:
-        "filter_contam"
     log:
         log_dir / "filter_contamination/{proj}/{sample}/{run}.log",
     shell:
@@ -126,10 +124,8 @@ rule extract_decontaminated_reads:
         reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
         stats=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.stats.tsv",
     threads: 1
-    group:
-        "filter_contam"
     resources:
-        mem_mb=lambda wildcards, attempt: int(6 * GB) * attempt,
+        mem_mb=lambda wildcards, attempt: int(8 * GB) * attempt,
     log:
         log_dir / "extract_decontaminated_reads/{proj}/{sample}/{run}.log",
     container:
