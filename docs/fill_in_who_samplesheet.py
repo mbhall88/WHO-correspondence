@@ -172,7 +172,7 @@ def main():
                     rows_to_write.append(acc)
             else:
                 metadata = fetch_metadata(query)
-                if not metadata.empty:
+                if metadata is not None and not metadata.empty:
                     for row in metadata.values:
                         new_acc = Accession.from_line(",".join(row))
                         if new_acc.run:
