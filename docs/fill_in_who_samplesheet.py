@@ -14,6 +14,7 @@ from enum import Enum
 from typing import Union
 
 from pysradb.search import EnaSearch, SraSearch
+from requests.exceptions import RetryError
 
 ENA_KEEP_METADATA = [
     "study_accession",
@@ -147,6 +148,7 @@ def main():
     rows_written = 0
     no_accs = 0
     only_proj = 0
+    errors = 0
 
     with open(input_file) as fp:
         header = next(fp)
@@ -180,7 +182,16 @@ def main():
                     seen_runs.add(acc.run)
                     rows_to_write.append(acc)
             else:
-                metadata = fetch_metadata(query)
+                try:
+                    metadata = fetch_metadata(query)
+                except RetryError:
+                    eprint(
+                        f"Exceeded maximum retries when fetching metadata for {query}...line is below"
+                    )
+                    eprint(line)
+                    errors += 1
+                    continue
+
                 if metadata is not None and not metadata.empty:
                     for row in metadata.values:
                         new_acc = Accession.from_line(",".join(row))
@@ -205,6 +216,7 @@ def main():
     eprint(f"{rows_written} rows written to new file")
     eprint(f"{no_accs} rows had no accession of any sort")
     eprint(f"{only_proj} rows only had project/study accessions")
+    eprint(f"{errors} error lines")
 
 
 if __name__ == "__main__":
