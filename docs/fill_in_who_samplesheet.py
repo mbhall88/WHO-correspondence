@@ -137,10 +137,10 @@ def main():
     else:
         out_fp = sys.stdout
 
-    print(
-        ",".join(["bioproject", "study", "biosample", "sample", "experiment", "run"]),
-        file=out_fp,
+    out_header = ",".join(
+        ["bioproject", "study", "biosample", "sample", "experiment", "run"]
     )
+    out_header += ","
 
     n_rows = 0
     seen_runs = set()
@@ -149,15 +149,24 @@ def main():
     only_proj = 0
 
     with open(input_file) as fp:
-        _ = next(fp)  # skip header
-        for line in fp:
+        header = next(fp)
+        header_fields = header.split(",")
+        drugs = header_fields[4:]
+        out_header += ",".join(drugs)
+        print(out_header, file=out_fp)
+
+        for line in map(str.rstrip, fp):
             rows_to_write = []
             n_rows += 1
-            if not line.strip(",").strip():
+
+            accessions = ",".join(line.split(",")[:4])
+            phenotypes = ",".join(line.split(",")[4:])
+
+            if not accessions.strip(",").strip():
                 no_accs += 1
                 continue
 
-            acc = Accession.from_line(line.replace("FAIL", ""))
+            acc = Accession.from_line(accessions.replace("FAIL", ""))
             query, acc_type = acc.most_specific()
 
             if acc_type in (AccessionType.BIOPROJECT, AccessionType.STUDY):
@@ -188,7 +197,9 @@ def main():
 
             for row in rows_to_write:
                 rows_written += 1
-                print(row.to_row(","), file=out_fp)
+                row_accs = row.to_row(",")
+                to_write = f"{row_accs},{phenotypes}"
+                print(to_write, file=out_fp)
 
     eprint(f"{n_rows} rows in original file")
     eprint(f"{rows_written} rows written to new file")
