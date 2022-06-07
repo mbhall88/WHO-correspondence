@@ -22,6 +22,14 @@ Specifically, the following columns were extracted:
 - `ena_experiment`
 - `ena_run`
 
+Along with the phenotypes for each drug.
+
+## `who-samplesheet-filled.csv`
+
+There are a lot of rows missing run accessions in `who-samplesheet.csv`, so these were filled in (where possible) using the `docs/fill_in_who_samplesheet.py` script.
+
+Rows with no accessions (2411) were removed in the process.
+
 ## `dlm-mics.csv`
 
 Gathering Delamanid (DLM) phenotypes
