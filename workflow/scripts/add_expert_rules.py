@@ -27,6 +27,7 @@ LOG_FMT = (
 )
 TRANSLATE = str.maketrans("ATGC", "TACG")
 STOP = "*"
+MISSENSE = "X"
 PROT = "PROT"
 DNA = "DNA"
 Contig = str
@@ -120,9 +121,9 @@ class Strand(Enum):
 
 
 class RuleType(Enum):
-    NonSynonymous = "nonsyn"
+    Missense = "missense"
     Frameshift = "frame"
-    Stop = "stop"
+    Nonsense = "nonsense"
 
 
 @dataclass
@@ -134,7 +135,7 @@ class Rule:
     stop: Optional[int] = None  # 1-based inclusive
     grade: Optional[int] = None
 
-    def _apply_stop(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
+    def _apply_nonsense(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
         protein = translate(nucleotide_seq, stop_last=True)
         start = 0 if self.start is None else self.start - 1
         stop = len(protein) if self.stop is None else self.stop
@@ -155,21 +156,70 @@ class Rule:
     ) -> Set[Tuple[str, str, str, str, int]]:
         pass
 
-    def _apply_nonsynonymous(
+    def _apply_missense(
         self, nucleotide_seq: str
     ) -> Set[Tuple[str, str, str, str, int]]:
-        pass
+        return {
+            (gene, mut.replace(STOP, MISSENSE), alpha, drug, grade)
+            for gene, mut, alpha, drug, grade in self._apply_nonsense(nucleotide_seq)
+        }
 
     def apply(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
-        if self.rule_type is RuleType.Stop:
-            return self._apply_stop(nucleotide_seq)
+        if self.rule_type is RuleType.Nonsense:
+            return self._apply_nonsense(nucleotide_seq)
         elif self.rule_type is RuleType.Frameshift:
             return self._apply_frameshift(nucleotide_seq)
-        elif self.rule_type is RuleType.NonSynonymous:
-            return self._apply_nonsynonymous(nucleotide_seq)
+        elif self.rule_type is RuleType.Missense:
+            return self._apply_missense(nucleotide_seq)
         else:
             raise NotImplementedError(f"Don't know how to apply {self.rule_type}")
 
+def get_indel_combinations(gene, base_before, base_after, start_at, end_at, drugs):
+    indels = []
+
+    for i in range(start_at, end_at + 1, 1):
+        for indel_length in [1, 2]:
+            if i == 0:
+                ref = base_after + gene[i : i + indel_length]
+                pos = -1
+            elif i == len(gene) - 1 and indel_length == 2:
+                ref = gene[i - 1 : i + indel_length] + base_after
+                pos = i - 1
+            else:
+                ref = gene[i - 1 : i + indel_length]
+                pos = i - 1
+            alt = ref[0]
+            indels.append(
+                PanelVariant(
+                    gene.id, "DNA", ref=ref, alt=alt, position=pos, drugs=drugs
+                )
+            )
+            if indel_length == 1:
+                continue
+
+            for nuc1 in nucleotides:
+                indels.append(
+                    PanelVariant(
+                        gene.id,
+                        "DNA",
+                        ref=alt,
+                        alt=alt + nuc1,
+                        position=pos,
+                        drugs=drugs,
+                    )
+                )
+                for nuc2 in nucleotides:
+                    indels.append(
+                        PanelVariant(
+                            gene.id,
+                            "DNA",
+                            ref=alt,
+                            alt=alt + nuc1 + nuc2,
+                            position=pos,
+                            drugs=drugs,
+                        )
+                    )
+    return indels
 
 def split_var_name(name: str) -> Tuple[str, int, str]:
     items = re.match(r"([A-Z]+)([-0-9]+)([A-Z/\*]+)", name, re.I).groups()
@@ -318,9 +368,9 @@ def setup_logging(verbose: bool) -> None:
     "--rules",
     help=(
         "Comma-separated file with expert rules. The format of this file is type, gene, start, "
-        "stop, drugs (semi-colon (;) separated), grade. Valid types are nonsyn "
-        "(non-synonymous mutations), frame (any frameshift "
-        "indel), or stop (stop codon). If both start and stop are empty, the whole "
+        "stop, drugs (semi-colon (;) separated), grade. Valid types are missense, "
+        "frame (any frameshift indel), or nonsense (premature stop codon). If both "
+        "start and stop are empty, the whole "
         "gene is used. If only start is given, then stop is considered the end of "
         "the gene and vice versa. Start and stop are CODONS, not positions, and are "
         "both 1-based inclusive. Grade is the (optional) grading to provide mutations arising from the rule"
@@ -348,7 +398,6 @@ def main(
     output: TextIO,
 ):
     setup_logging(verbose)
-
     logger.info("Indexing reference FASTA...")
     with reference.open() as ref_fp:
         index = index_fasta(ref_fp)
@@ -411,11 +460,20 @@ def main(
         for rule in rules:
             rule_variants = rule.apply(nuc_seq)
             if rule_variants:
-                logger.debug(f"Generated {len(rule_variants)} variants for rule {rule}")
+                logger.debug(
+                    f"Generated {len(rule_variants):,} variants for rule {rule}"
+                )
                 panel = panel.union(rule_variants)
+
+    if header:
+        print(
+            delim.join(["gene", "mutation", "alphabet", "drug", "grading"]), file=output
+        )
 
     for variant in sorted(panel, key=lambda t: (t[0], split_var_name(t[1])[1], t[1])):
         print(delim.join(map(str, variant)), file=output)
+
+    logger.success(f"Generated {len(panel):,} variants in total")
 
 
 if __name__ == "__main__":
