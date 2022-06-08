@@ -39,10 +39,12 @@ class Strand(Enum):
     def __str__(self) -> str:
         return str(self.value)
 
+
 class RuleType(Enum):
     NonSynonymous = "nonsyn"
     Frameshift = "frame"
     Stop = "stop"
+
 
 @dataclass
 class Rule:
@@ -51,6 +53,8 @@ class Rule:
     drugs: List[str]
     start: Optional[int] = None
     stop: Optional[int] = None
+    grade: Optional[int] = None
+
 
 @dataclass
 class GffFeature:
@@ -168,10 +172,11 @@ def setup_logging(verbose: bool) -> None:
     "--rules",
     help=(
         "Comma-separated file with expert rules. The format of this file is type, gene, start, "
-        "stop, drugs (semi-colon (;) separated). Valid types are nonsyn (non-synonymous mutations), frame (any frameshift "
+        "stop, drugs (semi-colon (;) separated), grade. Valid types are nonsyn (non-synonymous mutations), frame (any frameshift "
         "indel), or stop (stop codon). If both start and stop are empty, the whole "
         "gene is used. If only start is given, then stop is considered the end of "
-        "the gene and vice versa. Start and stop are CODONS, not positions, and are both inclusive"
+        "the gene and vice versa. Start and stop are CODONS, not positions, and are "
+        "both inclusive. Grade is the (optional) grading to provide mutations arising from the rule"
     ),
     required=True,
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
@@ -203,16 +208,20 @@ def main(
             fields = row.split(",")
             start = int(fields[2]) if fields[2] else None
             stop = int(fields[3]) if fields[3] else None
+            grade = int(fields[5]) if fields[5] else None
             drugs = ";".split(fields[4])
-            rule = Rule(RuleType(fields[0]), fields[1], drugs, start, stop)
+            rule = Rule(
+                rule_type=RuleType(fields[0]),
+                gene=fields[1],
+                drugs=drugs,
+                start=start,
+                stop=stop,
+                grade=grade,
+            )
             gene2rules[rule.gene].append(rule)
             n_rules += 1
 
     logger.success(f"Loaded {n_rules} expert rules for {len(gene2rules)} genes")
-
-
-
-
 
 
 if __name__ == "__main__":
