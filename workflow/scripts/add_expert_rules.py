@@ -29,6 +29,73 @@ Contig = str
 Seq = str
 Index = Dict[Contig, Seq]
 
+codon2amino = {
+    "TCA": "S",
+    "TCC": "S",
+    "TCG": "S",
+    "TCT": "S",
+    "TTC": "F",
+    "TTT": "F",
+    "TTA": "L",
+    "TTG": "L",
+    "TAC": "Y",
+    "TAT": "Y",
+    "TAA": "*",
+    "TAG": "*",
+    "TGC": "C",
+    "TGT": "C",
+    "TGA": "*",
+    "TGG": "W",
+    "CTA": "L",
+    "CTC": "L",
+    "CTG": "L",
+    "CTT": "L",
+    "CCA": "P",
+    "CCC": "P",
+    "CCG": "P",
+    "CCT": "P",
+    "CAC": "H",
+    "CAT": "H",
+    "CAA": "Q",
+    "CAG": "Q",
+    "CGA": "R",
+    "CGC": "R",
+    "CGG": "R",
+    "CGT": "R",
+    "ATA": "I",
+    "ATC": "I",
+    "ATT": "I",
+    "ATG": "M",
+    "ACA": "T",
+    "ACC": "T",
+    "ACG": "T",
+    "ACT": "T",
+    "AAC": "N",
+    "AAT": "N",
+    "AAA": "K",
+    "AAG": "K",
+    "AGC": "S",
+    "AGT": "S",
+    "AGA": "R",
+    "AGG": "R",
+    "GTA": "V",
+    "GTC": "V",
+    "GTG": "V",
+    "GTT": "V",
+    "GCA": "A",
+    "GCC": "A",
+    "GCG": "A",
+    "GCT": "A",
+    "GAC": "D",
+    "GAT": "D",
+    "GAA": "E",
+    "GAG": "E",
+    "GGA": "G",
+    "GGC": "G",
+    "GGG": "G",
+    "GGT": "G",
+}
+
 
 class Strand(Enum):
     Forward = "+"
@@ -54,6 +121,21 @@ class Rule:
     start: Optional[int] = None
     stop: Optional[int] = None
     grade: Optional[int] = None
+
+
+def translate(seq: str, stop_last=True) -> str:
+    if len(seq) % 3 != 0:
+        raise ValueError("Sequence length must be a multiple of 3")
+
+    prot = ""
+    for i in range(0, len(seq), 3):
+        codon = seq[i : i + 3]
+        prot += codon2amino[codon]
+
+    if stop_last and not prot.endswith("*"):
+        raise ValueError("Sequence did not end in a stop codon")
+
+    return prot
 
 
 @dataclass
@@ -95,6 +177,16 @@ class GffFeature:
         if zero_based:
             return self.start - 1, self.end
         return self.start, self.end + 1
+
+    def _extract_sequence(self, index: Index) -> str:
+        pass
+
+    def nucleotide_sequence(self, index: Index) -> str:
+        return self._extract_sequence(index)
+
+    def protein_sequence(self, index: Index) -> str:
+        nuc_seq = self.nucleotide_sequence(index)
+        return translate(nuc_seq)
 
 
 def is_header(s: str) -> bool:
@@ -156,23 +248,17 @@ def setup_logging(verbose: bool) -> None:
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
 )
 @click.option(
-    "-p",
-    "--panel",
-    help="A panel to add the mutations to",
-    type=click.Path(exists=True, dir_okay=False, path_type=Path),
-)
-@click.option(
-    "-d/-D",
-    "--deduplicate/--no-deduplicate",
+    "--header/--no-header",
     default=True,
-    help="Deduplicate variants if adding to an existing panel",
+    help="Whether to include a header in the output",
 )
 @click.option(
     "-x",
     "--rules",
     help=(
         "Comma-separated file with expert rules. The format of this file is type, gene, start, "
-        "stop, drugs (semi-colon (;) separated), grade. Valid types are nonsyn (non-synonymous mutations), frame (any frameshift "
+        "stop, drugs (semi-colon (;) separated), grade. Valid types are nonsyn "
+        "(non-synonymous mutations), frame (any frameshift "
         "indel), or stop (stop codon). If both start and stop are empty, the whole "
         "gene is used. If only start is given, then stop is considered the end of "
         "the gene and vice versa. Start and stop are CODONS, not positions, and are "
@@ -181,15 +267,22 @@ def setup_logging(verbose: bool) -> None:
     required=True,
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
 )
+@click.option(
+    "-o",
+    "--output",
+    help="File to write output to",
+    default="-",
+    type=click.File(mode="w"),
+)
 @click.option("-v", "--verbose", help="Turns on debug-level logger.", is_flag=True)
 @click.help_option("--help", "-h")
 def main(
     rules: Path,
-    deduplicate: bool,
-    panel: Optional[Path],
     annotation: Path,
     reference: Path,
     verbose: bool,
+    header: bool,
+    output: TextIO,
 ):
     setup_logging(verbose)
 
@@ -222,6 +315,30 @@ def main(
             n_rules += 1
 
     logger.success(f"Loaded {n_rules} expert rules for {len(gene2rules)} genes")
+
+    features = dict()
+    with annotation.open() as gff_fp:
+        for line in map(str.rstrip, gff_fp):
+            if not line or line.startswith("#"):
+                continue
+
+            feature = GffFeature.from_str(line)
+            if feature.method != "gene":
+                continue
+
+            if "Name" in feature.attributes:
+                name = feature.attributes["Name"]
+            elif "ID" in feature.attributes:
+                name = feature.attributes["ID"]
+            elif "gene" in feature.attributes:
+                name = feature.attributes["gene"]
+            else:
+                continue
+
+            if name not in gene2rules:
+                continue
+
+            features[name] = feature
 
 
 if __name__ == "__main__":
