@@ -1,0 +1,10 @@
+type,gene,start,stop,drugs
+nonsyn,rpoB,426,452,rifampicin
+stop,katG,,,isoniazid
+frame,katG,,,isoniazid
+stop,ethA,,,ethionamide
+frame,ethA,,,ethionamide
+stop,gid,,,streptomycin
+frame,gid,,,streptomycin
+stop,pncA,,,pyrazinamide
+frame,pncA,,,pyrazinamide
