@@ -9,22 +9,26 @@ defined as rpoB codons 426-452
 
 From the paper, these expert rules were considered Group 2 (Associated with R – Interim)
 """
+import re
 import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from itertools import repeat
 from pathlib import Path
-from typing import Optional, Dict, TextIO, List, Tuple
+from typing import Optional, Dict, TextIO, List, Tuple, Set
 
 import click
 from loguru import logger
-
 
 LOG_FMT = (
     "[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] <level>{level: <8}</level> | "
     "<level>{message}</level>"
 )
+TRANSLATE = str.maketrans("ATGC", "TACG")
+STOP = "*"
+PROT = "PROT"
+DNA = "DNA"
 Contig = str
 Seq = str
 Index = Dict[Contig, Seq]
@@ -40,11 +44,11 @@ codon2amino = {
     "TTG": "L",
     "TAC": "Y",
     "TAT": "Y",
-    "TAA": "*",
-    "TAG": "*",
+    "TAA": STOP,
+    "TAG": STOP,
     "TGC": "C",
     "TGT": "C",
-    "TGA": "*",
+    "TGA": STOP,
     "TGG": "W",
     "CTA": "L",
     "CTC": "L",
@@ -97,6 +101,14 @@ codon2amino = {
 }
 
 
+def revcomp(s: str) -> str:
+    return complement(s)[::-1]
+
+
+def complement(s: str) -> str:
+    return s.upper().translate(TRANSLATE)
+
+
 class Strand(Enum):
     Forward = "+"
     Reverse = "-"
@@ -118,9 +130,50 @@ class Rule:
     rule_type: RuleType
     gene: str
     drugs: List[str]
-    start: Optional[int] = None
-    stop: Optional[int] = None
+    start: Optional[int] = None  # 1-based inclusive
+    stop: Optional[int] = None  # 1-based inclusive
     grade: Optional[int] = None
+
+    def _apply_stop(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
+        protein = translate(nucleotide_seq, stop_last=True)
+        start = 0 if self.start is None else self.start - 1
+        stop = len(protein) if self.stop is None else self.stop
+        grade = -1 if self.grade is None else self.grade
+        mutations = set()
+        for i in range(start, stop):
+            aa = protein[i]
+            if aa == STOP:
+                continue
+            mut = f"{aa}{i+1}{STOP}"
+            for drug in self.drugs:
+                mutations.add((self.gene, mut, PROT, drug, grade))
+
+        return mutations
+
+    def _apply_frameshift(
+        self, nucleotide_seq: str
+    ) -> Set[Tuple[str, str, str, str, int]]:
+        pass
+
+    def _apply_nonsynonymous(
+        self, nucleotide_seq: str
+    ) -> Set[Tuple[str, str, str, str, int]]:
+        pass
+
+    def apply(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
+        if self.rule_type is RuleType.Stop:
+            return self._apply_stop(nucleotide_seq)
+        elif self.rule_type is RuleType.Frameshift:
+            return self._apply_frameshift(nucleotide_seq)
+        elif self.rule_type is RuleType.NonSynonymous:
+            return self._apply_nonsynonymous(nucleotide_seq)
+        else:
+            raise NotImplementedError(f"Don't know how to apply {self.rule_type}")
+
+
+def split_var_name(name: str) -> Tuple[str, int, str]:
+    items = re.match(r"([A-Z]+)([-0-9]+)([A-Z/\*]+)", name, re.I).groups()
+    return items[0], int(items[1]), items[2]
 
 
 def translate(seq: str, stop_last=True) -> str:
@@ -132,7 +185,7 @@ def translate(seq: str, stop_last=True) -> str:
         codon = seq[i : i + 3]
         prot += codon2amino[codon]
 
-    if stop_last and not prot.endswith("*"):
+    if stop_last and not prot.endswith(STOP):
         raise ValueError("Sequence did not end in a stop codon")
 
     return prot
@@ -179,10 +232,18 @@ class GffFeature:
         return self.start, self.end + 1
 
     def _extract_sequence(self, index: Index) -> str:
-        pass
+        refseq = index.get(self.seqid)
+        if refseq is None:
+            raise IndexError(f"Contig {self.seqid} does not exist in reference")
+        s, e = self.slice(zero_based=True)
+        return refseq[s:e]
 
     def nucleotide_sequence(self, index: Index) -> str:
-        return self._extract_sequence(index)
+        nuc_seq = self._extract_sequence(index)
+        if self.strand is Strand.Reverse:
+            nuc_seq = revcomp(nuc_seq)
+
+        return nuc_seq
 
     def protein_sequence(self, index: Index) -> str:
         nuc_seq = self.nucleotide_sequence(index)
@@ -262,7 +323,7 @@ def setup_logging(verbose: bool) -> None:
         "indel), or stop (stop codon). If both start and stop are empty, the whole "
         "gene is used. If only start is given, then stop is considered the end of "
         "the gene and vice versa. Start and stop are CODONS, not positions, and are "
-        "both inclusive. Grade is the (optional) grading to provide mutations arising from the rule"
+        "both 1-based inclusive. Grade is the (optional) grading to provide mutations arising from the rule"
     ),
     required=True,
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
@@ -274,6 +335,7 @@ def setup_logging(verbose: bool) -> None:
     default="-",
     type=click.File(mode="w"),
 )
+@click.option("-d", "--delim", help="Output file delimiter", default="\t")
 @click.option("-v", "--verbose", help="Turns on debug-level logger.", is_flag=True)
 @click.help_option("--help", "-h")
 def main(
@@ -282,6 +344,7 @@ def main(
     reference: Path,
     verbose: bool,
     header: bool,
+    delim: str,
     output: TextIO,
 ):
     setup_logging(verbose)
@@ -302,7 +365,7 @@ def main(
             start = int(fields[2]) if fields[2] else None
             stop = int(fields[3]) if fields[3] else None
             grade = int(fields[5]) if fields[5] else None
-            drugs = ";".split(fields[4])
+            drugs = fields[4].split(";")
             rule = Rule(
                 rule_type=RuleType(fields[0]),
                 gene=fields[1],
@@ -339,6 +402,20 @@ def main(
                 continue
 
             features[name] = feature
+
+    panel = set()
+    for gene, rules in gene2rules.items():
+        ftr = features[gene]
+        nuc_seq = ftr.nucleotide_sequence(index)
+
+        for rule in rules:
+            rule_variants = rule.apply(nuc_seq)
+            if rule_variants:
+                logger.debug(f"Generated {len(rule_variants)} variants for rule {rule}")
+                panel = panel.union(rule_variants)
+
+    for variant in sorted(panel, key=lambda t: (t[0], split_var_name(t[1])[1], t[1])):
+        print(delim.join(map(str, variant)), file=output)
 
 
 if __name__ == "__main__":
