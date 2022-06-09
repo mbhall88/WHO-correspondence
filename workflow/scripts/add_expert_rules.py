@@ -30,6 +30,7 @@ STOP = "*"
 MISSENSE = "X"
 PROT = "PROT"
 DNA = "DNA"
+NUCLEOTIDES = ["A", "C", "G", "T"]
 Contig = str
 Seq = str
 Index = Dict[Contig, Seq]
@@ -135,7 +136,9 @@ class Rule:
     stop: Optional[int] = None  # 1-based inclusive
     grade: Optional[int] = None
 
-    def _apply_nonsense(self, nucleotide_seq: str) -> Set[Tuple[str, str, str, str, int]]:
+    def _apply_nonsense(
+        self, nucleotide_seq: str
+    ) -> Set[Tuple[str, str, str, str, int]]:
         protein = translate(nucleotide_seq, stop_last=True)
         start = 0 if self.start is None else self.start - 1
         stop = len(protein) if self.stop is None else self.stop
@@ -154,7 +157,30 @@ class Rule:
     def _apply_frameshift(
         self, nucleotide_seq: str
     ) -> Set[Tuple[str, str, str, str, int]]:
-        pass
+        """There is an assumption in this method that 1bp up and downstream of the gene
+        have been included in nucleotide_seq
+        """
+        base_before = nucleotide_seq[0]
+        base_after = nucleotide_seq[-1]
+        nuc_seq = nucleotide_seq[1:-1]
+        start_at = 0 if self.start is None else self.start * 3 - 3
+        end_at = len(nuc_seq) if self.stop is None else self.stop * 3 - 3
+
+        indels = get_indel_combinations(
+            nuc_seq,
+            base_before=base_before,
+            base_after=base_after,
+            start_at=start_at,
+            end_at=end_at,
+        )
+        mutations = set()
+        grade = -1 if self.grade is None else self.grade
+        for drug in self.drugs:
+            for ref, pos, alt in indels:
+                mut = f"{ref}{pos}{alt}"
+                mutations.add((self.gene, mut, DNA, drug, grade))
+
+        return mutations
 
     def _apply_missense(
         self, nucleotide_seq: str
@@ -174,52 +200,39 @@ class Rule:
         else:
             raise NotImplementedError(f"Don't know how to apply {self.rule_type}")
 
-def get_indel_combinations(gene, base_before, base_after, start_at, end_at, drugs):
-    indels = []
 
-    for i in range(start_at, end_at + 1, 1):
+def get_indel_combinations(
+    seq: str,
+    base_before: str,
+    base_after: str,
+    start_at: int = 0,
+    end_at: Optional[int] = None,
+) -> List[Tuple[str, int, str]]:
+    indels = []
+    if end_at is None:
+        end_at = len(seq)
+
+    for i in range(start_at, end_at):
+        pos = i
         for indel_length in [1, 2]:
             if i == 0:
-                ref = base_after + gene[i : i + indel_length]
+                ref = base_before + seq[i : i + indel_length]
                 pos = -1
-            elif i == len(gene) - 1 and indel_length == 2:
-                ref = gene[i - 1 : i + indel_length] + base_after
-                pos = i - 1
+            elif i == len(seq) - 1 and indel_length == 2:
+                ref = seq[i - 1 : i + indel_length] + base_after
             else:
-                ref = gene[i - 1 : i + indel_length]
-                pos = i - 1
+                ref = seq[i - 1 : i + indel_length]
             alt = ref[0]
-            indels.append(
-                PanelVariant(
-                    gene.id, "DNA", ref=ref, alt=alt, position=pos, drugs=drugs
-                )
-            )
+            indels.append((ref, pos, alt))
             if indel_length == 1:
                 continue
 
-            for nuc1 in nucleotides:
-                indels.append(
-                    PanelVariant(
-                        gene.id,
-                        "DNA",
-                        ref=alt,
-                        alt=alt + nuc1,
-                        position=pos,
-                        drugs=drugs,
-                    )
-                )
-                for nuc2 in nucleotides:
-                    indels.append(
-                        PanelVariant(
-                            gene.id,
-                            "DNA",
-                            ref=alt,
-                            alt=alt + nuc1 + nuc2,
-                            position=pos,
-                            drugs=drugs,
-                        )
-                    )
+            for nuc1 in NUCLEOTIDES:
+                indels.append((alt, pos, alt + nuc1))
+                for nuc2 in NUCLEOTIDES:
+                    indels.append((alt, pos, alt + nuc1 + nuc2))
     return indels
+
 
 def split_var_name(name: str) -> Tuple[str, int, str]:
     items = re.match(r"([A-Z]+)([-0-9]+)([A-Z/\*]+)", name, re.I).groups()
@@ -281,15 +294,23 @@ class GffFeature:
             return self.start - 1, self.end
         return self.start, self.end + 1
 
-    def _extract_sequence(self, index: Index) -> str:
+    def _extract_sequence(
+        self, index: Index, start_offset: int = 0, end_offset: int = 0
+    ) -> str:
         refseq = index.get(self.seqid)
         if refseq is None:
             raise IndexError(f"Contig {self.seqid} does not exist in reference")
         s, e = self.slice(zero_based=True)
+        s -= start_offset
+        e += end_offset
         return refseq[s:e]
 
-    def nucleotide_sequence(self, index: Index) -> str:
-        nuc_seq = self._extract_sequence(index)
+    def nucleotide_sequence(
+        self, index: Index, start_offset: int = 0, end_offset: int = 0
+    ) -> str:
+        nuc_seq = self._extract_sequence(
+            index, start_offset=start_offset, end_offset=end_offset
+        )
         if self.strand is Strand.Reverse:
             nuc_seq = revcomp(nuc_seq)
 
@@ -455,9 +476,14 @@ def main(
     panel = set()
     for gene, rules in gene2rules.items():
         ftr = features[gene]
-        nuc_seq = ftr.nucleotide_sequence(index)
 
         for rule in rules:
+            if rule.rule_type is RuleType.Frameshift:
+                nuc_seq = ftr.nucleotide_sequence(
+                    index=index, start_offset=1, end_offset=1
+                )
+            else:
+                nuc_seq = ftr.nucleotide_sequence(index)
             rule_variants = rule.apply(nuc_seq)
             if rule_variants:
                 logger.debug(
