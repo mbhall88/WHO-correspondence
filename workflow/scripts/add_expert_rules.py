@@ -509,13 +509,13 @@ def main(
 
     if header:
         print(
-            delim.join(["gene", "mutation", "alphabet", "drug", "grading"]), file=output
+            delim.join(["gene", "mutation", "alphabet"]), file=output
         )
 
     var2drug = defaultdict(set)
 
     for variant in sorted(panel, key=lambda t: (t[0], split_var_name(t[1])[1], t[1])):
-        print(delim.join(map(str, variant)), file=output)
+        print(delim.join(map(str, variant[:3])), file=output)
         mut = f"{variant[0]}_{variant[1]}"
         drug = variant[3]
         var2drug[mut].add(drug)
