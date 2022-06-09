@@ -9,6 +9,7 @@ defined as rpoB codons 426-452
 
 From the paper, these expert rules were considered Group 2 (Associated with R – Interim)
 """
+import json
 import re
 import sys
 from collections import defaultdict
@@ -331,6 +332,12 @@ class DuplicateContigsError(Exception):
     pass
 
 
+def set_default(obj):
+    if isinstance(obj, set):
+        return list(obj)
+    raise TypeError
+
+
 def index_fasta(stream: TextIO) -> Index:
     fasta_index: Index = dict()
     sequence: List[Seq] = []
@@ -402,8 +409,16 @@ def setup_logging(verbose: bool) -> None:
 @click.option(
     "-o",
     "--output",
-    help="File to write output to",
-    default="-",
+    help="File to write panel to",
+    default="panel.tsv",
+    type=click.File(mode="w"),
+)
+@click.option(
+    "-j",
+    "--var2drug",
+    "out_json",
+    help="File to write var2drug JSON to",
+    default="var2drug.json",
     type=click.File(mode="w"),
 )
 @click.option("-d", "--delim", help="Output file delimiter", default="\t")
@@ -417,6 +432,7 @@ def main(
     header: bool,
     delim: str,
     output: TextIO,
+    out_json: TextIO,
 ):
     setup_logging(verbose)
     logger.info("Indexing reference FASTA...")
@@ -496,8 +512,15 @@ def main(
             delim.join(["gene", "mutation", "alphabet", "drug", "grading"]), file=output
         )
 
+    var2drug = defaultdict(set)
+
     for variant in sorted(panel, key=lambda t: (t[0], split_var_name(t[1])[1], t[1])):
         print(delim.join(map(str, variant)), file=output)
+        mut = f"{variant[0]}_{variant[1]}"
+        drug = variant[3]
+        var2drug[mut].add(drug)
+
+    json.dump(var2drug, out_json, indent=4, default=set_default)
 
     logger.success(f"Generated {len(panel):,} variants in total")
 
