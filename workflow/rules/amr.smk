@@ -1,8 +1,8 @@
 rule mykrobe_who_panel:
     input:
         reads=results / "filtered/{proj}/{sample}/{run}/{run}.filtered.fq.gz",
-        probes=panel_dir / "who2021/grading_2/probes.fa",
-        resistance_json=panel_dir / "who2021/grading_2/var2drug.json",
+        probes=rules.construct_who_panel.output.probes,
+        resistance_json=rules.construct_who_panel.input.resistance_json,
     output:
         report=results / "amr_predictions/who2021/{proj}/{sample}/{run}.mykrobe.json",
     shadow:
@@ -117,7 +117,7 @@ rule combine_amr_reports:
     output:
         report=results / "amr_predictions/{panel}.csv",
     log:
-        log_dir / "combine_amr_reports/{panel}.log"
+        log_dir / "combine_amr_reports/{panel}.log",
     container:
         containers["python"]
     script:

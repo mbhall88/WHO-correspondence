@@ -51,7 +51,7 @@ def load_strands(path: Path) -> Dict[str, str]:
     return strands
 
 
-max_grade = int(snakemake.wildcards.grade)
+max_grade = snakemake.params.max_grade
 gene_strands = load_strands(snakemake.input.features)
 adjustments = snakemake.params.adjustments
 var2drug = defaultdict(list)

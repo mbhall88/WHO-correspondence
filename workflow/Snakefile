@@ -8,7 +8,9 @@ import pandas as pd
 configfile: "config/config.yaml"
 
 
-samplesheet = pd.read_csv(config["samplesheet"], index_col="run")
+samplesheet = pd.read_csv(config["samplesheet"], index_col="run").query(
+    "bioproject!='PRJNA438921'"
+)
 containers: Dict[str, str] = config["containers"]
 # =====================================
 
@@ -28,6 +30,7 @@ h37rv = Path(config["reference"]).resolve()
 annotation = Path(config["genbank"]).resolve()
 features = Path(config["features"]).resolve()
 full_panel = Path(config["full_panel"]).resolve()
+expert_rules = Path(config["expert_rules"])
 GRADES = config["grades"]
 PANELS = ["who2021", "hunt2019", "hall2022"]
 # =====================================

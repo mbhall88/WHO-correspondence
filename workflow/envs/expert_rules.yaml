@@ -1,0 +1,7 @@
+name: expert_rules
+channels:
+  - conda-forge
+dependencies:
+  - python =3.9
+  - click =8.1
+  - loguru =0.6
