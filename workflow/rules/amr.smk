@@ -8,11 +8,9 @@ rule mykrobe_who_panel:
     shadow:
         "shallow"
     resources:
-        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
+        mem_mb=lambda wildcards, attempt: attempt * 4 * GB,
     container:
         containers["mykrobe"]
-    group:
-        "mykrobe"
     log:
         log_dir / "mykrobe_who_panel/{proj}/{sample}/{run}.log",
     params:
@@ -43,11 +41,9 @@ rule mykrobe_default_panel:
     shadow:
         "shallow"
     resources:
-        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
+        mem_mb=lambda wildcards, attempt: attempt * 4 * GB,
     container:
         containers["mykrobe"]
-    group:
-        "mykrobe"
     log:
         log_dir / "mykrobe_default_panel/{proj}/{sample}/{run}.log",
     params:
@@ -77,10 +73,8 @@ rule mykrobe_combined_panel:
         report=results / "amr_predictions/hall2022/{proj}/{sample}/{run}.mykrobe.json",
     shadow:
         "shallow"
-    group:
-        "mykrobe"
     resources:
-        mem_mb=lambda wildcards, attempt: attempt * 2 * GB,
+        mem_mb=lambda wildcards, attempt: attempt * 4 * GB,
     container:
         containers["mykrobe"]
     log:
