@@ -60,7 +60,7 @@ class Accession:
     def from_line(s: str, delim: str = ",") -> "Accession":
         acc = Accession()
         fields = [f for f in s.rstrip().split(delim) if f]
-        for f in fields:
+        for f in map(str.strip, fields):
             acc_type = AccessionType.from_str(f)
             if acc_type is AccessionType.BIOSAMPLE:
                 acc.biosample = f
