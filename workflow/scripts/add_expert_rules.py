@@ -518,7 +518,7 @@ def main(
         print(delim.join(map(str, variant[:3])), file=output)
         mut = f"{variant[0]}_{variant[1]}"
         drug = variant[3]
-        var2drug[mut].add(drug)
+        var2drug[mut].add(drug.capitalize())
 
     json.dump(var2drug, out_json, indent=4, default=set_default)
 
