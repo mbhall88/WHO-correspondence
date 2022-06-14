@@ -8,9 +8,7 @@ import pandas as pd
 configfile: "config/config.yaml"
 
 
-samplesheet = pd.read_csv(config["samplesheet"], index_col="run").query(
-    "bioproject!='PRJNA438921'"
-)
+samplesheet = pd.read_csv(config["samplesheet"], index_col="run")
 containers: Dict[str, str] = config["containers"]
 # =====================================
 
