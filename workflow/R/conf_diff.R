@@ -1,6 +1,6 @@
 ##FUNCTIONS
 
-.getNP<-function(v1, z=1.96){
+.getNP<-function(v, z=1.96){
  
   #p=(v[1]+v[3])/2; # 
   p = v[2]
@@ -212,7 +212,7 @@ setwd("../pvalues")
 .writeLatexTable<-function(formatted,outfile="latex.txt"){
  
   out=file(outfile,"wt")
-  sep=" eol \n"
+  sep=" \\\\ \n"
   nmes1 = unlist(lapply(names(formatted[[1]]), function(x) paste0("\\textbf{",x,"}")))
   writeLines( paste(nmes1,collapse=" & "),con=out,sep=sep)
   line1="\\multicolumn{_n_}{c}{\\textbf{_entry_}}"
